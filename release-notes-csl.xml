@@ -1,0 +1,58 @@
+<!-- This file contains a series of release note fragments processed
+     by gnu-notes.  To add a note to it, use "gnu-notes -a
+     $release_config newlib".  The TARGET line should contain a
+     list of shell glob patterns for target names to which the note is
+     relevant; it may be removed if it is relevant to all targets.
+ -->
+
+      <!-- UUID: 1d05c230-b979-48ca-9af5-b48d29a4b09e -->
+      <!-- TARGET: arm-none-eabi arm-rockwell-eabi -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: OS-6246 -->
+      <formalpara>
+        <title>Fix Newlib multilib ABI compatibility</title>
+        <para>
+	  &csl_prod; now uses the same internal reentrancy data
+	  structures for Thumb-2 as for ARM and Thumb.
+        </para>
+      </formalpara>
+
+      <!-- UUID: a09da69a-7089-4c25-ad6e-6361ed994b0a -->
+      <!-- TARGET: arm* -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: 17186 -->
+      <formalpara components="no-license">
+        <title>Useless <code>.eh_frame</code> section removed
+        from <function>strcmp</function></title>
+        <para>
+          The implementation of <function>strcmp</function> in the
+          Newlib C library for ARM no longer contains a
+          useless <code>.eh_frame</code> section.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 445caead-13f0-4124-b520-e80417c84531 -->
+      <!-- TARGET: * -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: CBMR-498 -->
+      <formalpara components="license">
+        <title>Switch from CSLIBC to Newlib</title>
+        <para>
+	  &csl_prod; now uses Newlib instead of CSLIBC.  Refer to
+	  <xref linkend="sec-cslibc"/> for more information about
+	  this change.
+        </para>
+      </formalpara>
+
+      <!-- UUID: a2b564ba-2c64-4f6d-8605-0dd5dae234c1 -->
+      <!-- TARGET: * -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: -->
+      <formalpara>
+        <title>Newlib update</title>
+        <para>
+          The Newlib package has been updated to version 2.2.0.
+        </para>
+      </formalpara>
+
+<!-- Release notes end here.  -->

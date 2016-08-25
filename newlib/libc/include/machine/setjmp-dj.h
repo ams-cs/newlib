@@ -21,7 +21,7 @@
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct __jmp_buf {
   unsigned long eax;
   unsigned long ebx;
   unsigned long ecx;

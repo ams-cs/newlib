@@ -2,6 +2,15 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2016-01-20  Nathan Sidwell  <nathan@codesourcery.com>
+
+	* newlib/libc/include/machine/setjmp-dj.h (__jmp_buf): Add struct tag.
+	* newlib/libc/machine/i386/setjmp.S: Avoid using STI/CLI.
+
+2016-08-25  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2015-12-11  Zachary T Welch  <zwelch@codesourcery.com>
 
 	CB-5564

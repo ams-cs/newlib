@@ -115,10 +115,12 @@ SYM (longjmp):
 
 	movl	24(edi),ebp
 
-       __CLI
-	movl	28(edi),esp
-	
-	pushl	32(edi)	
+/* Avoid CLI/STI, which is priviledged and causes signal in qemu.  */
+	movl	28(edi),eax
+	subl	$4,eax
+	movl	32(edi),ebx
+	movl	ebx,0(eax)
+	movl	eax,0(esp)
 
 	movl	0(edi),eax
 	movl	4(edi),ebx
@@ -126,7 +128,7 @@ SYM (longjmp):
 	movl	12(edi),edx
 	movl	16(edi),esi
 	movl	20(edi),edi
-       __STI
+	movl	0(esp),esp
 #endif
 
 	ret

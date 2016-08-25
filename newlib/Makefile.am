@@ -230,6 +230,14 @@ stmp-targ-include: config.status
 	      cp $$i targ-include/`basename $$i`; \
 	    else true; fi ; \
 	  done
+	@if [ -d $(srcdir)/libc/machine/$(machine_dir)/include/$(machine_dir) ]; then \
+	  mkdir targ-include/$(machine_dir); \
+	fi ;
+	-for i in $(srcdir)/libc/machine/$(machine_dir)/include/$(machine_dir)/*.h; do \
+	    if [ -f $$i ]; then \
+	      cp $$i targ-include/$(machine_dir)/`basename $$i`; \
+	    else true; fi ; \
+	  done
 	-for i in $(srcdir)/libc/sys/$(sys_dir)/include/*.h; do \
 	    if [ -f $$i ]; then \
 	      cp $$i targ-include/`basename $$i`; \
@@ -301,6 +309,12 @@ endif
 	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/rpc; \
 	  for i in $(srcdir)/libc/include/rpc/*.h; do \
 	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/rpc/`basename $$i`; \
+	  done; \
+	  if [ -d $(srcdir)/libc/machine/$(machine_dir)/include/$(machine_dir) ]; then \
+	    $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/$(machine_dir); \
+	  else true; fi ; \
+	  for i in $(srcdir)/libc/machine/$(machine_dir)/include/$(machine_dir)/*.h; do \
+	   $(INSTALL_DATA) $$i $(DESTDIR)$(tooldir)/include/$(machine_dir)/`basename $$i`; \
 	  done; \
 	  $(mkinstalldirs) $(DESTDIR)$(tooldir)/include/sys; \
 	  for i in $(srcdir)/libc/include/sys/*.h; do \

@@ -1,6 +1,19 @@
 2016-08-25  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:
+
+	2009-04-07  Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
+	* Makefile.am (stmp-targ-include): Copy headers from
+	machine/include/$(machine_dir).
+	(install-data-local): Install headers to
+	include/$(machine_dir).
+	* Makefile.in: Regenerated.
+
+2016-08-25  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
  
 	2015-09-29  Kwok Cheung Yeung  <kcy@codesourcery.com>
 		    Catherine Moore  <clm@codesourcery.com>

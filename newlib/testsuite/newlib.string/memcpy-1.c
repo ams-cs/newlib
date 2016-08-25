@@ -97,6 +97,7 @@ main (void)
      MAX_BLOCK_SIZE bytes, aligned and misaligned source and destination.  */
   for (sa = 0; sa <= MAX_OFFSET; sa++)
     for (da = 0; da <= MAX_OFFSET; da++)
+    {
       for (n = 1; n <= MAX_BLOCK_SIZE; n++)
         {
           printf (".");
@@ -145,12 +146,14 @@ main (void)
 
           /* Check src is not modified.  */
           for (j = 0; j < BUFF_SIZE; j++)
-            if (src[i] != backup_src[i])
+            if (src[j] != backup_src[j])
               print_error ("\nFailed: after memcpy of %u bytes "
                            "with src_align %u and dst_align %u, "
                            "byte %u of src is modified.\n",
                            n, sa, da, j);
         }
+      printf("\n");
+    }
 
   printf ("\n");
   if (errors != 0)

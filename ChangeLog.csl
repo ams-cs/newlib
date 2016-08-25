@@ -1,3 +1,15 @@
+2016-08-25  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2015-12-11  Zachary T Welch  <zwelch@codesourcery.com>
+
+	CB-5564
+
+	newlib/testsuite/newlib.string:
+	* memcpy-1.c (main): Workaround prefetch abort on kaden.
+	Fix src buffer verification loop.
+
 2016-08-19  Catherine Moore  <clm@codesourcery.com>
 
 	* release-notes-csl.xml: New file.

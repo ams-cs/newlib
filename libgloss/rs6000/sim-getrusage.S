@@ -17,9 +17,19 @@
 #include "ppc-asm.h"
 
 FUNC_START(getrusage)
+#ifdef __VLE__
+	.section .text_vle
+	se_li	r0,117
+	se_sc
+	se_bns	0f
+	e_b	FUNC_NAME(_cerror)
+0:	se_blr
+#else
+	.text
 	li	r0,117
 	sc
 	bns+	0f
 	b	FUNC_NAME(_cerror)
 0:	blr
+#endif
 FUNC_END(getrusage)

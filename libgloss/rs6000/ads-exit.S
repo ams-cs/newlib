@@ -22,7 +22,13 @@ FUNC_START(_exit)
  * not whatever function happens to follow this function.
  */
 
+#ifdef __VLE__
+	.section .text_vle
+0:	trap
+	se_b 	0b
+#else
 0:	trap
 	b	0b
+#endif
 FUNC_END(_exit)
 

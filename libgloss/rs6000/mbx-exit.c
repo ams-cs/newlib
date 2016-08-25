@@ -18,7 +18,11 @@
 
 void _exit(int stat)
 {
+#ifdef __VLE__
+    asm volatile ("e_li 10,0xf00; se_sc\n");
+#else
     asm volatile ("li 10,0xf00; sc\n");
+#endif
 
     while (1) ;
 

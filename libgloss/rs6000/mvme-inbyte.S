@@ -17,6 +17,20 @@
 #include "ppc-asm.h"
 
 	.file	"mvme-inbyte.S"
+#ifdef __VLE__
+	.section .text_vle
+FUNC_START(inbyte)
+	e_li	r10,0x0
+	se_sc
+	se_blr
+FUNC_END(inbyte)
+
+FUNC_START(__inln)
+	e_li	r10,0x2
+	se_sc
+	se_blr
+FUNC_END(__inln)
+#else
 	.text
 FUNC_START(inbyte)
 	li	r10,0x0
@@ -29,3 +43,4 @@ FUNC_START(__inln)
 	sc
 	blr
 FUNC_END(__inln)
+#endif

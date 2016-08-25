@@ -17,6 +17,33 @@
 #include "ppc-asm.h"
 
 	.file	"mvme-outbyte.S"
+#ifdef __VLE__
+	.section .text_vle
+FUNC_START(outbyte)
+	e_li	r10,0x20
+	se_sc
+	se_blr
+FUNC_END(outbyte)
+
+FUNC_START(__outstr)
+	e_li	r10,0x21
+	se_sc
+	se_blr
+FUNC_END(__outstr)
+
+FUNC_START(__outln)
+	e_li	r10,0x22
+	se_sc
+	se_blr
+FUNC_END(__outln)
+
+FUNC_START(__pcrlf)
+	e_li	r10,0x26
+	se_sc
+	se_blr
+FUNC_END(__pcrlf)
+
+#else
 	.text
 FUNC_START(outbyte)
 	li	r10,0x20
@@ -41,3 +68,4 @@ FUNC_START(__pcrlf)
 	sc
 	blr
 FUNC_END(__pcrlf)
+#endif

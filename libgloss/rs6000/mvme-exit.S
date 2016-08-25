@@ -17,10 +17,16 @@
 #include "ppc-asm.h"
 
 	.file	"mvme-exit.S"
-	.text
 FUNC_START(_exit)
+#ifdef __VLE__
+	.section text_vle
+	e_li	r10,0x63
+	se_sc
+#else
+	.text
 	li	r10,0x63
 	sc
+#endif
 
 /*
  * Insure that the debugger tells the client that the PC is in _exit,
@@ -28,5 +34,9 @@ FUNC_START(_exit)
  */
 
 0:	trap
+#ifdef __VLE__
+	se_b	0b
+#else
 	b	0b			/* we never should return, but... */
+#endif
 FUNC_END(_exit)

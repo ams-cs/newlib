@@ -16,6 +16,17 @@
 
 #include "ppc-asm.h"
 
+#ifdef __VLE__
+	.file	"mcount-dummy.S"
+	.section .text_vle
+FUNC_START(_mcount)
+	se_mflr	r0
+	se_mtctr r0
+	se_lwz	r0,4(sp)
+	se_mtlr	r0
+	se_bctr
+FUNC_END(_mcount)
+#else
 	.file	"mcount-dummy.S"
 	.text
 FUNC_START(_mcount)
@@ -25,3 +36,4 @@ FUNC_START(_mcount)
 	mtlr	r0
 	bctr
 FUNC_END(_mcount)
+#endif

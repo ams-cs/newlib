@@ -1,6 +1,30 @@
 2016-08-25  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:
+ 
+	2015-09-29  Kwok Cheung Yeung  <kcy@codesourcery.com>
+		    Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
+	* libc/machine/powerpc/setjmp.S: Port to VLE.
+
+	libgloss/
+	* rs6000/sim-crt0.S: Port to VLE.
+	* rs6000/mbx-inbyte.c: Likewise.
+	* rs6000/mbx-outbyte.c: Likewise.
+	* rs6000/mcount.S: Likewise.
+	* rs6000/crt0.S: Likewise.
+	* rs6000/sim-getrusage.S: Likewise.
+	* rs6000/mbx-exit.c: Likewise.
+	* rs6000/ads-exit.S: Likewise.
+	* rs6000/simulator.S: Likewise.
+	* rs6000/mvme-inbyte.S: Likewise.
+	* rs6000/mvme-outbyte.S: Likewise.
+	* rs6000/mvme-exit.S: Likewise.
+
+2016-08-25  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
 
 	2016-01-20  Nathan Sidwell  <nathan@codesourcery.com>
 

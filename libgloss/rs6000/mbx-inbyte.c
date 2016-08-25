@@ -42,6 +42,17 @@ int inbyte(void)
 	inpb->len  = 1;
 	inpb->rsrvd = 0;
 
+#ifdef __VLE__
+	asm volatile (
+            "mr  3,%0\n"
+	    "mr  4,%1\n"
+	    "e_li  10,0x200\n"
+	    "se_sc"
+	    : /* no outputs */
+	    : "r" (inpb), "r" (outpb)
+	    : "3", "4", "10"
+	);
+#else
 	asm volatile (
             "mr  3,%0\n"
 	    "mr  4,%1\n"
@@ -51,6 +62,7 @@ int inbyte(void)
 	    : "r" (inpb), "r" (outpb)
 	    : "3", "4", "10"
 	);
+#endif
     } while (outpb->status == 0 && outpb->cnt == 0);
 
     if (outpb->status == 0)

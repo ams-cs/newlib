@@ -52,12 +52,87 @@ FUNC_NAME(__atexit):			/* tell C's eabi-ctor's we have an atexit function */
 .Lstack = .-.LCTOC1			/* stack address if set by user */
 	.long	__stack
 
+#ifdef __VLE__
+	.section .text_vle
+#else
 	.text
+#endif
 .Lptr:
 	.long .LCTOC1-.Laddr
 
 	.globl	_start
 	.type	_start,@function
+#ifdef __VLE__
+_start:
+	se_bl	.Laddr			/* get current address */
+.Laddr:
+	se_mflr	r4			/* real address of .Laddr */
+	e_lwz	r5,(.Lptr-.Laddr)(r4)	/* linker generated address of .LCTOC1 */
+	se_add	r5,r4			/* correct to real pointer */
+	e_lwz	r4,.Ltable(r5)		/* get linker's idea of where .Laddr is */
+	se_subf	r4,r5			/* calculate difference between where linked and current */
+
+	/* clear bss and sbss */
+	e_lwz	r6,.Lbss_start(r5)	/* calculate beginning of the BSS */
+	e_lwz	r7,.Lend(r5)		/* calculate end of the BSS */
+	se_add	r6,r4			/* adjust pointers */
+	se_add	r7,r4
+
+	se_cmpl  r6,r7
+	se_bt	cr0,.Ldone1
+
+	subf	r8,r6,r7		/* number of bytes to zero */
+	e_srwi	r0,r8,2			/* number of words to zero */
+	se_mtctr	r0
+	se_li	r0,0			/* zero to clear memory */
+	e_add16i r6,r6,-4		/* adjust so we can use stwu */
+.Lloop:
+	e_stwu	r0,4(r6)		/* zero bss */
+	e_bdnz	.Lloop
+
+.Ldone1:
+
+	e_lwz	r6,.Lsbss_start(r5)	/* calculate beginning of the SBSS */
+	e_lwz	r7,.Lsbss_end(r5)	/* calculate end of the SBSS */
+	se_add	r6,r4			/* adjust pointers */
+	se_add	r7,r4
+
+	se_cmpl  r6,r7
+	se_bt	cr0, .Ldone
+
+	subf	r8,r6,r7		/* number of bytes to zero */
+	e_srwi	r0,r8,2			/* number of words to zero */
+	se_mtctr r0
+	se_li	r0,0			/* zero to clear memory */
+	e_add16i r6,r6,-4		/* adjust so we can use stwu */
+.Lloop2:
+	e_stwu	r0,4(r6)		/* zero bss */
+	e_bdnz	.Lloop2
+
+.Ldone:
+
+	e_lwz	r0,.Lstack(r5)		/* stack address or 0 */
+	se_cmpli r0,0			/* equal to 0? */
+/* check */
+	se_bf	cr0,.Lnostack		/* use default stack if == 0 */
+	se_mr	sp,r0			/* use user defined stack */
+
+.Lnostack:
+	/* set up initial stack frame */
+	e_add16i sp,sp,-4		/* make sure we don't overwrite debug mem */
+	e_lis	r0,0
+	se_stw	r0,0(sp)		/* clear back chain */
+	e_stwu	sp,-64(sp)		/* push another stack frame */
+
+	/* Let her rip */
+	e_bl	FUNC_NAME(main)
+
+	/* return value from main is argument to exit */
+	e_bl	FUNC_NAME(exit)
+	trap
+
+#else /* Not __VLE__ */
+
 _start:
 	bl	.Laddr			/* get current address */
 .Laddr:
@@ -124,5 +199,6 @@ _start:
 	/* return value from main is argument to exit */
 	bl	FUNC_NAME(exit)
 	trap
+#endif
 .Lstart:
 	.size	_start,.Lstart-_start

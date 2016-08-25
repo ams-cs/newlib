@@ -17,6 +17,21 @@
 #include "ppc-asm.h"
 
 	.file	"sim-crt0.S"
+#ifdef __VLE__
+	.section .text_vle
+	.globl	_start
+	.type	_start,@function
+_start:
+	e_lis	r0,0
+	se_stw	r0,0(sp)	/* clear back chain */
+	e_stwu	sp,-64(sp)	/* push another stack frame */
+
+	/* Let her rip */
+	e_bl	FUNC_NAME(main)
+
+	/* return value from main is argument to exit */
+	e_bl	FUNC_NAME(exit)
+#else
 	.text
 	.globl	_start
 	.type	_start,@function
@@ -30,6 +45,7 @@ _start:
 
 	/* return value from main is argument to exit */
 	bl	FUNC_NAME(exit)
+#endif
 .Lstart:
 	.size	_start,.Lstart-_start
 

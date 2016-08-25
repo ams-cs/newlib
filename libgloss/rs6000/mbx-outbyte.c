@@ -42,6 +42,17 @@ static int sendbyte(char c)
     inpb->rsrvd = 0;
     inpb->buf[0] = c;
 
+#ifdef __VLE__
+    asm volatile (
+	"mr  3,%0\n"
+	"mr  4,%1\n"
+	"e_li  10,0x201\n"
+	"se_sc"
+	: /* no outputs */
+	: "r" (inpb), "r" (outpb)
+	: "3", "4", "10"
+    );
+#else
     asm volatile (
         "mr  3,%0\n"
         "mr  4,%1\n"
@@ -51,6 +62,7 @@ static int sendbyte(char c)
 	: "r" (inpb), "r" (outpb)
 	: "3", "4", "10"
     );
+#endif
 
     return (outpb->status == 0 && outpb->cnt == 1);
 }

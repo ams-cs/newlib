@@ -8,6 +8,9 @@ FUNC_START(setjmp)
 #ifdef __ALTIVEC__
 	addi	3,3,15		# align Altivec to 16 byte boundary
 	rlwinm	3,3,0,0,27
+#elif defined (__VLE__)
+	se_addi	3,7
+	e_rlwinm 3,3,0,0,28
 #else
 	addi	3,3,7		# align to 8 byte boundary
 	rlwinm	3,3,0,0,28
@@ -39,7 +42,33 @@ FUNC_START(setjmp)
 	/* Add 164 to r3 to account for the amount of data we just
 	   stored.  Note that we are not adding 168 because the next
 	   store instruction uses an offset of 4.  */
+#ifdef __VLE__
+	e_add16i 3,3,164
+#else
 	addi	3,3,164
+#endif
+#elif defined (__VLE__)
+	e_stw	1,0(3)		# offset 0
+	e_stwu	2,4(3)		# offset 4
+	e_stwu	13,4(3)		# offset 8
+	e_stwu	14,4(3)		# offset 12
+	e_stwu	15,4(3)		# offset 16
+	e_stwu	16,4(3)		# offset 20
+	e_stwu	17,4(3)		# offset 24
+	e_stwu	18,4(3)		# offset 28
+	e_stwu	19,4(3)		# offset 32
+	e_stwu	20,4(3)		# offset 36
+	e_stwu	21,4(3)		# offset 40
+	e_stwu	22,4(3)		# offset 44
+	e_stwu	23,4(3)		# offset 48
+	e_stwu	24,4(3)		# offset 52
+	e_stwu	25,4(3)		# offset 56
+	e_stwu	26,4(3)		# offset 60
+	e_stwu	27,4(3)		# offset 64
+	e_stwu	28,4(3)		# offset 68
+	e_stwu	29,4(3)		# offset 72
+	e_stwu	30,4(3)		# offset 76
+	e_stwu	31,4(3)		# offset 80
 #else
 	stw	1,0(3)		# offset 0
 	stwu	2,4(3)		# offset 4
@@ -68,11 +97,19 @@ FUNC_START(setjmp)
 	   to the offset shown if __SPE__.  This difference comes from
 	   the fact that we save 21 64-bit registers instead of 21
 	   32-bit registers above.  */
+#ifdef __VLE__
+	se_mflr	4
+	e_stwu	4,4(3)		# offset 84
+	mfcr	4
+	e_stwu	4,4(3)		# offset 88
+				# one word pad to get floating point aligned on 8 byte boundary
+#else
 	mflr	4
 	stwu	4,4(3)		# offset 84
 	mfcr	4
 	stwu	4,4(3)		# offset 88
 				# one word pad to get floating point aligned on 8 byte boundary
+#endif
 
 	/* Check whether we need to save FPRs.  Checking __NO_FPRS__
 	   on its own would be enough for GCC 4.1 and above, but older
@@ -132,8 +169,13 @@ FUNC_START(setjmp)
 
 	/* This requires a total of 240 + 8 + 8 + 12 * 16 == 448 bytes. */
 #endif
+#ifdef __VLE__
+	se_li	3,0
+	se_blr
+#else
 	li	3,0
 	blr
+#endif
 FUNC_END(setjmp)
 
 
@@ -141,6 +183,9 @@ FUNC_START(longjmp)
 #ifdef __ALTIVEC__
 	addi	3,3,15		# align Altivec to 16 byte boundary
 	rlwinm	3,3,0,0,27
+#elif defined (__VLE__)
+	se_addi	3,7		# align to 8 byte boundary
+	e_rlwinm 3,3,0,0,28
 #else
 	addi	3,3,7		# align to 8 byte boundary
 	rlwinm	3,3,0,0,28
@@ -172,7 +217,33 @@ FUNC_START(longjmp)
 	/* Add 164 to r3 to account for the amount of data we just
 	   loaded.  Note that we are not adding 168 because the next
 	   load instruction uses an offset of 4.  */
+#ifdef __VLE__
+	e_add16i 3,3,164
+#else
 	addi	3,3,164
+#endif
+#elif defined (__VLE__)
+	se_lwz	1,0(3)		# offset 0
+	e_lwzu	2,4(3)		# offset 4
+	e_lwzu	13,4(3)		# offset 8
+	e_lwzu	14,4(3)		# offset 12
+	e_lwzu	15,4(3)		# offset 16
+	e_lwzu	16,4(3)		# offset 20
+	e_lwzu	17,4(3)		# offset 24
+	e_lwzu	18,4(3)		# offset 28
+	e_lwzu	19,4(3)		# offset 32
+	e_lwzu	20,4(3)		# offset 36
+	e_lwzu	21,4(3)		# offset 40
+	e_lwzu	22,4(3)		# offset 44
+	e_lwzu	23,4(3)		# offset 48
+	e_lwzu	24,4(3)		# offset 52
+	e_lwzu	25,4(3)		# offset 56
+	e_lwzu	26,4(3)		# offset 60
+	e_lwzu	27,4(3)		# offset 64
+	e_lwzu	28,4(3)		# offset 68
+	e_lwzu	29,4(3)		# offset 72
+	e_lwzu	30,4(3)		# offset 76
+	e_lwzu	31,4(3)		# offset 80
 #else
 	lwz	1,0(3)		# offset 0 
 	lwzu	2,4(3)		# offset 4 
@@ -200,11 +271,18 @@ FUNC_START(longjmp)
 	   to the offset shown if __SPE__.  This difference comes from
 	   the fact that we restore 21 64-bit registers instead of 21
 	   32-bit registers above.  */
+#ifdef __VLE__
+	e_lwzu	5,4(3)		# offset 84
+	se_mtlr	5
+	e_lwzu	5,4(3)		# offset 88
+	mtcrf	255,5
+#else
 	lwzu	5,4(3)		# offset 84
 	mtlr	5
 	lwzu	5,4(3)		# offset 88
 	mtcrf	255,5
 				# one word pad to get floating point aligned on 8 byte boundary
+#endif
 
 	/* Check whether we need to restore FPRs.  Checking
 	   __NO_FPRS__ on its own would be enough for GCC 4.1 and
@@ -261,8 +339,17 @@ FUNC_START(longjmp)
 	lvx	31,0,3		# offset 432
 #endif
 
+#ifdef __VLE__
+	mr.	3,4
+	se_bne  1f
+	se_blrl
+1:
+	e_li	3,1
+	se_blr
+#else
 	mr.	3,4
 	bclr+	4,2
 	li	3,1
 	blr
+#endif
 FUNC_END(longjmp)

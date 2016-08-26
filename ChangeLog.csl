@@ -1,3 +1,10 @@
+2016-08-26  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	* COPYING.NEWLIB:  Add copyright notices for MIPS
+	and Mentor Graphics.
+
 2016-08-25  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

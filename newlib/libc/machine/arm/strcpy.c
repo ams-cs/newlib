@@ -155,12 +155,24 @@ strcpy (char* dst, const char* src)
        "bne	1b\n\t"
        "RETURN"
 #else
+#if defined (__clang__)
+       "movs	r3, r0\n\t"
+#else
        "mov	r3, r0\n\t"
+#endif
   "1:\n\t"
        "ldrb	r2, [r1]\n\t"
+#if defined (__clang__)
+       "adds	r1, r1, #1\n\t"
+#else
        "add	r1, r1, #1\n\t"
+#endif
        "strb	r2, [r3]\n\t"
+#if defined (__clang__)
+       "adds	r3, r3, #1\n\t"
+#else
        "add	r3, r3, #1\n\t"
+#endif
        "cmp	r2, #0\n\t"
        "bne	1b\n\t"
        "RETURN"

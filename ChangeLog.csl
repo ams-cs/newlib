@@ -2,6 +2,17 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2014-08-18  Meador Inge  <meadori@codesourcery.com>
+
+	newlib/
+
+	* libc/machine/arm/strcpy.c (strcpy): Allow compilation with
+	Clang which always uses unified assembly.
+
+2016-08-26  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	* COPYING.NEWLIB:  Add copyright notices for MIPS
 	and Mentor Graphics.
 

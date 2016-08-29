@@ -6,21 +6,28 @@ INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 
 AM_CCASFLAGS = $(INCLUDES)
 
-noinst_LIBRARIES = lib.a
 
-lib_a_SOURCES = setjmp.S access.c strcmp.S strcpy.c \
+LIB_SOURCES = setjmp.S access.c strcmp.S strcpy.c \
 		aeabi_memcpy.c aeabi_memcpy-armv7a.S \
 		aeabi_memmove.c aeabi_memmove-soft.S \
 		aeabi_memset.c aeabi_memset-soft.S aeabi_memclr.c
-lib_a_SOURCES += memchr-stub.c
-lib_a_SOURCES += memchr.S
-lib_a_SOURCES += memcpy-stub.c
-lib_a_SOURCES += memcpy.S
-lib_a_SOURCES += strlen-stub.c
-lib_a_SOURCES += strlen.S
+LIB_SOURCES += memchr-stub.c
+LIB_SOURCES += memchr.S
+LIB_SOURCES += memcpy-stub.c
+LIB_SOURCES += memcpy.S
+LIB_SOURCES += strlen-stub.c
+LIB_SOURCES += strlen.S
 
+if USE_LIBTOOL
+noinst_LTLIBRARIES = libarm.la
+libarm_la_SOURCES = $(LIB_SOURCES)
+noinst_DATA = objectlist.awk.in
+else
+noinst_LIBRARIES = lib.a
+lib_a_SOURCES = $(LIB_SOURCES)
 lib_a_CCASFLAGS=$(AM_CCASFLAGS)
 lib_a_CFLAGS = $(AM_CFLAGS)
+endif
 
 ACLOCAL_AMFLAGS = -I ../../.. -I ../../../..
 CONFIG_STATUS_DEPENDENCIES = $(newlib_basedir)/configure.host

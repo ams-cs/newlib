@@ -1,3 +1,21 @@
+2016-08-29  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2009-12-20  Joseph Myers  <joseph@codesourcery.com>
+ 
+ 	newlib/
+	* libc/machine/arm/Makefile.am: Add libtool code.  Include
+	Makefile.shared.
+	* libc/machine/arm/configure.in: Add libtool code.
+	* libc/machine/arm/Makefile.in, libc/machine/arm/aclocal.m4,
+	libc/machine/arm/configure: Regenerate.
+	* libc/sys/arm/Makefile.am: Add libtool code.  Include
+	Makefile.shared.
+	* libc/sys/arm/configure.in: Add libtool code.
+	* libc/sys/arm/Makefile.in, libc/sys/arm/aclocal.m4,
+	libc/sys/arm/configure: Regenerate.
+
 2016-08-26  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

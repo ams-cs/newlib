@@ -829,6 +829,10 @@ case "${target}" in
   arm-wince-pe)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;
+  arm*-*-nucleuseabi)
+    noconfigdirs="$noconfigdirs ${libgcj}"
+    libgloss_dir=arm
+    ;;
   arm*-*-symbianelf*)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;

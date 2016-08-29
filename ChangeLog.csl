@@ -2,6 +2,27 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	* configure.ac (arm*-*-nucleuseabi): Add support.
+	* libtool.m4: Add support for nucleus.
+
+	newlib/
+	* configure.host: Add support for nucleus.
+	* configure, iconvdata/configure, libc/configure,
+        libc/machine/arm/configure, libc/machine/configure,
+        libc/machine/i386/configure, libc/sys/arm/configure,
+        libc/sys/configure, libc/sys/linux/configure,
+	libc/sys/linux/linuxthreads/configure,
+	libc/sys/linux/linuxthreads/machine/configure,
+	libc/sys/linux/linuxthreads/machine/i386/configure,
+	libc/sys/linux/machine/configure, 
+	libc/sys/linux/machine/i386/configure,
+        libm/configure, libm/machine/configure,
+	libm/machine/i386/configure: Regenerated.
+
+2016-08-29  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2009-12-20  Joseph Myers  <joseph@codesourcery.com>
  
  	newlib/

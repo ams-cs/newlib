@@ -2279,6 +2279,23 @@ dgux*)
   shlibpath_var=LD_LIBRARY_PATH
   ;;
 
+nucleuseabi*)
+  case $host_vendor in
+    samsung)
+      version_type=linux
+      need_lib_prefix=no
+      need_version=no
+      library_names_spec='${libname}${release}${shared_ext}$versuffix ${libname}${release}${shared_ext}${major} ${libname}${shared_ext}'
+      soname_spec='${libname}${release}${shared_ext}$major'
+      shlibpath_var=LD_LIBRARY_PATH
+      hardcode_into_libs=yes
+      ;;
+    *)
+      dynamic_linker=no
+      ;;
+  esac
+  ;;
+
 freebsd* | dragonfly*)
   # DragonFly does not have aout.  When/if they implement a new
   # versioning mechanism, adjust this.
@@ -3027,6 +3044,10 @@ cegcc*)
   lt_cv_file_magic_cmd='$OBJDUMP -f'
   ;;
 
+nucleuseabi*)
+  lt_cv_deplibs_check_method=pass_all
+  ;;
+
 darwin* | rhapsody*)
   lt_cv_deplibs_check_method=pass_all
   ;;
@@ -3109,6 +3130,16 @@ newos6*)
 
 *nto* | *qnx*)
   lt_cv_deplibs_check_method=pass_all
+  ;;
+
+nucleus*)
+  case $host_vendor in
+    samsung)
+      lt_cv_deplibs_check_method=pass_all
+      ;;
+    *)
+      ;;
+  esac
   ;;
 
 openbsd*)
@@ -4449,7 +4480,7 @@ _LT_EOF
       _LT_TAGVAR(archive_expsym_cmds, $1)='sed "s,^,_," $export_symbols >$output_objdir/$soname.expsym~$CC -shared $pic_flag $libobjs $deplibs $compiler_flags ${wl}-h,$soname ${wl}--retain-symbols-file,$output_objdir/$soname.expsym ${wl}--image-base,`expr ${RANDOM-$$} % 4096 / 2 \* 262144 + 1342177280` -o $lib'
       ;;
 
-    gnu* | linux* | tpf* | k*bsd*-gnu | kopensolaris*-gnu)
+    gnu* | linux* | tpf* | k*bsd*-gnu | kopensolaris*-gnu | nucleuseabi*)
       tmp_diet=no
       if test "$host_os" = linux-dietlibc; then
 	case $cc_basename in

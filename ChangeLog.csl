@@ -1,3 +1,15 @@
+2016-08-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2010-03-03  Nathan Sidwell  <nathan@codesourcery.com>
+
+	newlib/
+	* configure.host (*-*-nucleus*): Disable unsupported posix items.
+	* libc/search/hash_bigkey.c (MIN, MAX): Provide definitions.
+	* libc/search/hash_page.c (open_temp): Only use sigset functions
+	if they are available.
+
 2016-08-29  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

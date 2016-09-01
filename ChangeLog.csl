@@ -1,3 +1,72 @@
+2016-09-01  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	newlib/
+	* libc/machine/mips/include/mips/amethyst.h: New file.
+	* libc/machine/mips/include/mips/asm.h: New file.
+	* libc/machine/mips/include/mips/atomic.h: New file.
+	* libc/machine/mips/include/mips/cop2.h: New file.
+	* libc/machine/mips/include/mips/cpu.h: New file.
+	* libc/machine/mips/include/mips/cw4002.h: New file.
+	* libc/machine/mips/include/mips/cw400x.h: New file.
+	* libc/machine/mips/include/mips/cwxcpt.h: New file.
+	* libc/machine/mips/include/mips/dsp.h: New file.
+	* libc/machine/mips/include/mips/endian.h: New file.
+	* libc/machine/mips/include/mips/fpa.h: New file.
+	* libc/machine/mips/include/mips/instr16def.h: New file.
+	* libc/machine/mips/include/mips/instrdef.h: New file.
+	* libc/machine/mips/include/mips/jade.h: New file.
+	* libc/machine/mips/include/mips/kit_impl.h: New file.
+	* libc/machine/mips/include/mips/l64360.h: New file.
+	* libc/machine/mips/include/mips/lr33000.h: New file.
+	* libc/machine/mips/include/mips/lr33020.h: New file.
+	* libc/machine/mips/include/mips/lr33300.h: New file.
+	* libc/machine/mips/include/mips/m16c1.h: New file.
+	* libc/machine/mips/include/mips/m32c0.h: New file.
+	* libc/machine/mips/include/mips/m32c1.h: New file.
+	* libc/machine/mips/include/mips/m32tlb.h: New file.
+	* libc/machine/mips/include/mips/m32xcpt.h: New file.
+	* libc/machine/mips/include/mips/m64c0.h: New file.
+	* libc/machine/mips/include/mips/mips24k.h: New file.
+	* libc/machine/mips/include/mips/mips32.h: New file.
+	* libc/machine/mips/include/mips/mips34k.h: New file.
+	* libc/machine/mips/include/mips/mips64.h: New file.
+	* libc/machine/mips/include/mips/mips74k.h: New file.
+	* libc/machine/mips/include/mips/mt.h: New file.
+	* libc/machine/mips/include/mips/notlb.h: New file.
+	* libc/machine/mips/include/mips/opal.h: New file.
+	* libc/machine/mips/include/mips/prid.h: New file.
+	* libc/machine/mips/include/mips/r3041.h: New file.
+	* libc/machine/mips/include/mips/r3081.h: New file.
+	* libc/machine/mips/include/mips/r36100.h: New file.
+	* libc/machine/mips/include/mips/r3kc0.h: New file.
+	* libc/machine/mips/include/mips/r3kc1.h: New file.
+	* libc/machine/mips/include/mips/r3ktlb.h: New file.
+	* libc/machine/mips/include/mips/r3kxcpt.h: New file.
+	* libc/machine/mips/include/mips/r4650.h: New file.
+	* libc/machine/mips/include/mips/r4650xcpt.h: New file.
+	* libc/machine/mips/include/mips/r4kc0.h: New file.
+	* libc/machine/mips/include/mips/r4kc1.h: New file.
+	* libc/machine/mips/include/mips/r4ktlb.h: New file.
+	* libc/machine/mips/include/mips/r4kxcpt.h: New file.
+	* libc/machine/mips/include/mips/r5kc0.h: New file.
+	* libc/machine/mips/include/mips/r5kc1.h: New file.
+	* libc/machine/mips/include/mips/r5kxcpt.h: New file.
+	* libc/machine/mips/include/mips/rc32364.h: New file.
+	* libc/machine/mips/include/mips/rc6457x.h: New file.
+	* libc/machine/mips/include/mips/regdef.h: New file.
+	* libc/machine/mips/include/mips/rm7kc0.h: New file.
+	* libc/machine/mips/include/mips/rm7kxcpt.h: New file.
+	* libc/machine/mips/include/mips/ruby.h: New file.
+	* libc/machine/mips/include/mips/smartmips.h: New file.
+	* libc/machine/mips/include/mips/tr4101.h: New file.
+	* libc/machine/mips/include/mips/tr4102.h: New file.
+	* libc/machine/mips/include/mips/udi.h: New file.
+	* libc/machine/mips/include/mips/watchpoint.h: New file.
+	* libc/machine/mips/include/mips/xcpt.h: New file.
+	* libc/machine/mips/include/mips/xcptcpu.h: New file.
+
 2016-08-30  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

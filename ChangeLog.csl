@@ -3,6 +3,23 @@
 	Merge from /csl/newlib/branches/2016.05:
 
 	newlib/
+	* libm/machine/mips: New directory.
+	* libm/machine/mips/s_rint.S: New.
+	* libm/machine/mips/w_sqrt.S: New.
+	* libm/machine/mips/wf_sqrt.S: New.
+	* libm/machine/mips/configure.in: New.
+	* libm/machine/mips/Makefile.am: New.
+	* libm/machine/mips/r3kc1.h: New.
+	* libm/machine/mips/w_drem.S: New.
+	* libm/machine/mips/configure: Regenerated.
+	* libm/machine/mips/aclocal.m4: Regenerated.
+	* libm/machine/mips/Makefile.in: Regenerated.
+	
+2016-09-01  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	newlib/
 	* libc/machine/mips/include/mips/amethyst.h: New file.
 	* libc/machine/mips/include/mips/asm.h: New file.
 	* libc/machine/mips/include/mips/atomic.h: New file.

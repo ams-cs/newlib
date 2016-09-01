@@ -1304,9 +1304,27 @@ _DEFUN (strtof, (s00, se),
 	_CONST char *__restrict s00 _AND
 	char **__restrict se)
 {
-  double retval = _strtod_l (_REENT, s00, se, __get_current_locale ());
-  if (isnan (retval))
-    return nanf (NULL);
+  double d;
+  float retval;
+
+  d = _strtod_l (_REENT, s00, se, __get_current_locale ());
+  retval = (float) d;
+
+#ifndef NO_ERRNO
+  /* Check for out-of-range values.  */
+  if (/* Underflow.  */
+      (!retval && d)
+      /* Positive overflow.  */
+      || (retval == HUGE_VALF && d != HUGE_VAL)
+      /* Negative overflow.  */
+      || (retval == -HUGE_VALF && d != -HUGE_VAL))
+    _REENT->_errno = ERANGE;
+#endif
+
+  return retval;
+ }
+ 
+ #endif
   return (float)retval;
 }
 

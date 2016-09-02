@@ -2,6 +2,26 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2009-03-16  Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
+	* libc/machine/mips/memcmp.S: New.
+	* libc/machine/mips/Makefile.am: Add new files.
+	* libc/machine/mips/Makefile.in: Regenerated.
+	* libc/machine/mips/strcpy.S: New.
+	* libc/machine/mips/strlen.c: Removed.
+	* libc/machine/mips/strlen.S: New.
+	* libc/machine/mips/strcmp.c: Removed.
+	* libc/machine/mips/strcmp.S: New.
+	* libc/machine/mips/memset.c: Removed.
+	* libc/machine/mips/memset.S: New.
+	* libc/machine/mips/memcpy.c: Removed.
+	* libc/machine/mips/memcpy.S: New.
+
+2016-09-02  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	Brooks Moses  <brooks@codesourcery.com>
 	Daniel Jacobowitz  <dan@codesourcery.com>
 	Nathan Froyd  <froydnj@codesourcery.com>

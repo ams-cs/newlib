@@ -8,7 +8,9 @@ AM_CCASFLAGS = $(INCLUDES)
 
 noinst_LIBRARIES = lib.a
 
-lib_a_SOURCES = setjmp.S strlen.c strcmp.S strncpy.c memset.S memcpy.S
+lib_a_SOURCES = signal.c ffsll.c \
+		memcmp.S memcpy.S memset.S setjmp.S \
+		strcmp.S strcpy.S strlen.S strncpy.c
 lib_a_CCASFLAGS=$(AM_CCASFLAGS) -D_COMPILING_NEWLIB
 lib_a_CFLAGS=$(AM_CFLAGS) -D_COMPILING_NEWLIB
 

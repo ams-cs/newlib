@@ -314,6 +314,11 @@ if test "${have_sys_mach_dir}" = "yes"; then
 fi
 AC_SUBST(SYS_MACH_OBJECTLIST)
 
+if test -n "${aeabi_dir}"; then
+  AEABI_OBJECTLIST=libc/${aeabi_dir}/objectlist.awk.in
+fi
+AC_SUBST(AEABI_OBJECTLIST)
+
 if test -n "${posix_dir}"; then
   POSIX_OBJECTLIST=libc/${posix_dir}/objectlist.awk.in
 fi

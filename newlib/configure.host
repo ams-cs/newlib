@@ -33,6 +33,7 @@
 #   machine_dir		Subdirectory of libc/machine to configure
 #   sys_dir		Subdirectory of libc/sys to configure
 #   have_sys_mach_dir	Is there a machine subdirectory in sys subdirectory
+#   aeabi_dir		"aeabi" to build libc/aeabi, "" otherwise
 #   posix_dir		"posix" to build libc/posix, "" otherwise
 #   signal_dir		"signal" to build libc/signal, "" otherwise
 #   stdio64_dir		"stdio64" to build libc/stdio64, "" otherwise
@@ -412,6 +413,7 @@ case "${host}" in
 	;;
   arm*-*-*)
 	sys_dir=arm
+	aeabi_dir=aeabi
 	if [ "x${newlib_may_supply_syscalls}" = "xno" ] ; then
 	  have_crt0="no"
 	fi

@@ -10,8 +10,17 @@ extern "C" {
 
 #undef assert
 
+  /* Indicate that we honor AEABI portability if requested.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
+# define _AEABI_PORTABLE
+#endif
+
 #ifdef NDEBUG           /* required by ANSI standard */
 # define assert(__e) ((void)0)
+#if defined _AEABI_PORTABLE
+  void _EXFUN(__aeabi_assert, (const char *, const char *, int)
+              _ATTRIBUTE ((__noreturn__)));
+# define assert(__e) ((__e) ? (void)0 : __aeabi_assert (#__e, __FILE__, __LINE__))
 #else
 # define assert(__e) ((__e) ? (void)0 : __assert_func (__FILE__, __LINE__, \
 						       __ASSERT_FUNC, #__e))
@@ -34,6 +43,7 @@ extern "C" {
 #   define __ASSERT_FUNC ((char *) 0)
 #  endif
 # endif /* !__ASSERT_FUNC */
+#endif /* _AEABI_PORTABLE */
 #endif /* !NDEBUG */
 
 void _EXFUN(__assert, (const char *, int, const char *)

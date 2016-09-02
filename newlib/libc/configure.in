@@ -62,6 +62,17 @@ dnl For each directory which we may or may not want, we define a name
 dnl for the library and an automake conditional for whether we should
 dnl build the library.
 
+LIBC_AEABI_LIB=
+if test -n "${aeabi_dir}"; then
+  if test "${use_libtool}" = "yes"; then
+    LIBC_AEABI_LIB=${aeabi_dir}/lib${aeabi_dir}.${aext}
+  else
+    LIBC_AEABI_LIB=${aeabi_dir}/lib.${aext}
+  fi
+fi
+AC_SUBST(LIBC_AEABI_LIB)
+AM_CONDITIONAL(HAVE_AEABI_DIR, test x${aeabi_dir} != x)
+
 LIBC_SIGNAL_LIB=
 LIBC_SIGNAL_DEF=
 if test -n "${signal_dir}"; then
@@ -209,5 +220,5 @@ fi
 AC_SUBST(LIBC_MACHINE_LIB)
 AC_SUBST(machine_dir)
 
-AC_CONFIG_FILES([Makefile argz/Makefile ctype/Makefile errno/Makefile locale/Makefile misc/Makefile reent/Makefile search/Makefile stdio/Makefile stdio64/Makefile stdlib/Makefile string/Makefile time/Makefile posix/Makefile signal/Makefile syscalls/Makefile unix/Makefile iconv/Makefile iconv/ces/Makefile iconv/ccs/Makefile iconv/ccs/binary/Makefile iconv/lib/Makefile xdr/Makefile])
+AC_CONFIG_FILES([Makefile aeabi/Makefile argz/Makefile ctype/Makefile errno/Makefile locale/Makefile misc/Makefile reent/Makefile search/Makefile stdio/Makefile stdio64/Makefile stdlib/Makefile string/Makefile time/Makefile posix/Makefile signal/Makefile syscalls/Makefile unix/Makefile iconv/Makefile iconv/ces/Makefile iconv/ccs/Makefile iconv/ccs/binary/Makefile iconv/lib/Makefile xdr/Makefile])
 AC_OUTPUT

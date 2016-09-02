@@ -3,13 +3,23 @@
 
 #include <newlib.h>
 #include <sys/cdefs.h>
+#include "_ansi.h"
 
+  /* Indicate that we honor AEABI portability if requested.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
+# define _AEABI_PORTABLE
+#endif
+
+#ifdef _AEABI_PORTABLE
+extern _CONST int __aeabi_MB_LEN_MAX;
+# define MB_LEN_MAX (__aeabi_MB_LEN_MAX)
+#else
 # ifdef _MB_LEN_MAX
 #  define MB_LEN_MAX	_MB_LEN_MAX
 # else
 #  define MB_LEN_MAX    1
 # endif
-
+#endif /* AEABI_PORTABLE */
 /* Maximum number of positional arguments, if _WANT_IO_POS_ARGS.  */
 # ifndef NL_ARGMAX
 #  define NL_ARGMAX 32

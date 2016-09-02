@@ -55,7 +55,9 @@ extern size_t strxfrm_l (char *__restrict, const char *__restrict, size_t,
 			 locale_t);
 #endif
 
-#if __MISC_VISIBLE || __POSIX_VISIBLE
+#if !defined _AEABI_PORTABLE
+
+#if (__MISC_VISIBLE || __POSIX_VISIBLE)
 char 	*_EXFUN(strtok_r,(char *__restrict, const char *__restrict, char **__restrict));
 #endif
 #if __BSD_VISIBLE /* POSIX declaration is in <strings.h> */
@@ -171,7 +173,7 @@ int	_EXFUN(strtosigno, (const char *__name));
 			 __out[__len-1] = '\0'; \
 			 (char *) memcpy (__out, __in, __len-1);}))
 #endif /* __GNU_VISIBLE && __GNUC__ */
-
+#endif /* !_AEABI_PORTABLE */
 /* There are two common basename variants.  If you do NOT #include <libgen.h>
    and you do
 

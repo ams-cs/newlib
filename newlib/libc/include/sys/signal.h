@@ -254,21 +254,51 @@ int _EXFUN(sigqueue, (pid_t pid, int signo, const union sigval value));
 #define NSIG    20
 #elif !defined(SIGTRAP)
 #define	SIGHUP	1	/* hangup */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGINT;
+#define SIGINT (__aeabi_SIGINT)
+#else
 #define	SIGINT	2	/* interrupt */
+#endif
 #define	SIGQUIT	3	/* quit */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGILL;
+#define SIGILL (__aeabi_SIGILL)
+#else
 #define	SIGILL	4	/* illegal instruction (not reset when caught) */
+#endif
 #define	SIGTRAP	5	/* trace trap (not reset when caught) */
 #define	SIGIOT	6	/* IOT instruction */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGABRT;
+#define SIGABRT (__aeabi_SIGABRT)
+#else
 #define	SIGABRT 6	/* used by abort, replace SIGIOT in the future */
+#endif
 #define	SIGEMT	7	/* EMT instruction */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGFPE;
+#define SIGFPE (__aeabi_SIGFPE)
+#else
 #define	SIGFPE	8	/* floating point exception */
+#endif
 #define	SIGKILL	9	/* kill (cannot be caught or ignored) */
 #define	SIGBUS	10	/* bus error */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGSEGV;
+#define SIGSEGV (__aeabi_SIGSEGV)
+#else
 #define	SIGSEGV	11	/* segmentation violation */
+#endif
 #define	SIGSYS	12	/* bad argument to system call */
 #define	SIGPIPE	13	/* write on a pipe with no one to read it */
 #define	SIGALRM	14	/* alarm clock */
+#ifdef _AEABI_PORTABLE
+  extern _CONST int __aeabi_SIGTERM;
+#define SIGTERM (__aeabi_SIGTERM);
+#else
 #define	SIGTERM	15	/* software termination signal from kill */
+#endif
 
 #if defined(__rtems__)
 #define	SIGURG	16	/* urgent condition on IO channel */

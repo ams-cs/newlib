@@ -1,0 +1,31 @@
+# We only support AEABI on ARM and Power.
+
+if {![istarget arm*-*-*] && ![istarget powerpc*-*-*]} {
+    return
+}
+
+# We want to ensure that the standard headers that need to honor
+# _AEABI_PORTABILITY_LEVEL do so.
+
+foreach fullsrcfile [glob -nocomplain $srcdir/$subdir/compile-*.c] {
+    set srcfile "[file tail $fullsrcfile]"
+    # If we're only testing specific files and this isn't one of them, skip it.
+    if ![runtest_file_p $runtests $srcfile] then {
+        continue
+    }
+
+    if { $srcfile == "compile-stdio.c" } {
+        # stdio.h is not AEABI compliant.
+        setup_xfail "*-*-*"
+    }
+
+    set test_driver "$tmpdir/[file rootname $srcfile].o"
+
+    set comp_output [newlib_target_compile "$fullsrcfile" "$test_driver" "object" ""]
+
+    if { $comp_output != "" } {
+        fail "$subdir/$srcfile compilation"
+    } else {
+        pass "$subdir/$srcfile compilation"
+    }
+}

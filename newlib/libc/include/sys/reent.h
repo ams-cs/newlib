@@ -178,6 +178,16 @@ extern _VOID   _EXFUN(__sinit,(struct _reent *));
 # define _REENT_SMALL_CHECK_INIT(ptr) /* nothing */
 #endif
 
+  /* When we are compiling portable AEABI code, we must ensure that FILE
+     is an opaque type.  We use a slightly more complicated test on
+     _AEABI_PORTABILITY_LEVEL rather than checking _AEABI_PORTABLE or
+     defining it above because this header is included everywhere, and
+     defining _AEABI_PORTABLE would not be valid for certain
+     headers.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0
+  /* Opaque definition for the AEABI.  */
+struct __sFILE;
+#else
 struct __sFILE {
   unsigned char *_p;	/* current position in (some) buffer */
   int	_r;		/* read space left for getc() */
@@ -228,15 +238,17 @@ struct __sFILE {
   _mbstate_t _mbstate;	/* for wide char stdio functions. */
   int   _flags2;        /* for future use */
 };
+#endif /* _AEABI_PORTABILITY_LEVEL */
 
-#ifdef __CUSTOM_FILE_IO__
+#if defined __CUSTOM_FILE_IO__ && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 
 /* Get custom _FILE definition.  */
 #include <sys/custom_file.h>
 
-#else /* !__CUSTOM_FILE_IO__ */
+#else /* !__CUSTOM_FILE_IO__ || _AEABI_PORTABILITY_LEVEL */
 #ifdef __LARGE64_FILES
 struct __sFILE64 {
+#if !defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0
   unsigned char *_p;	/* current position in (some) buffer */
   int	_r;		/* read space left for getc() */
   int	_w;		/* write space left for putc() */
@@ -280,13 +292,14 @@ struct __sFILE64 {
 #ifndef __SINGLE_THREAD__
   _flock_t _lock;	/* for thread-safety locking */
 #endif
+#endif /* _AEABI_PORTABILITY_LEVEL */
   _mbstate_t _mbstate;	/* for wide char stdio functions. */
 };
 typedef struct __sFILE64 __FILE;
 #else
 typedef struct __sFILE   __FILE;
 #endif /* __LARGE64_FILES */
-#endif /* !__CUSTOM_FILE_IO__ */
+#endif /* !__CUSTOM_FILE_IO__ || _AEABI_PORTABILITY_LEVEL */
 
 struct _glue
 {
@@ -339,6 +352,14 @@ struct _rand48 {
  * reentrant.  IE: All state information is contained here.
  */
 
+/* We only provide a forward declaration of struct _reent if we are
+   compiling with _AEABI_PORTABILITY_LEVEL != 0 to avoid problems with
+   struct _reent needing to know the size of FILE objects (which need to
+   be opaque types, see above).  Fortunately, this is not a problem, as
+   only pointers to struct _reent are passed around.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0
+struct _reent;
+#else
 #ifdef _REENT_SMALL
 
 struct _mprec
@@ -743,6 +764,7 @@ struct _reent
 #define _REENT_GETDATE_ERR_P(ptr) (&((ptr)->_new._reent._getdate_err))
 
 #endif /* !_REENT_SMALL */
+#endif /* _AEABI_PORTABILITY_LEVEL */
 
 #define _REENT_INIT_PTR(var) \
   { memset((var), 0, sizeof(*(var))); \

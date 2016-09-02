@@ -111,12 +111,38 @@ typedef _fpos64_t fpos64_t;
  * Although these happen to match their counterparts above, the
  * implementation does not rely on that (so these could be renumbered).
  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0
+extern _CONST int __aeabi_IOFBF;
+extern _CONST int __aeabi_IOLBF;
+extern _CONST int __aeabi_IONBF;
+#define _IOFBF (__aeabi_IOFBF)
+#define _IOLBF (__aeabi_IOLBF)
+#define _IONBF (__aeabi_IONBF)
+#else
 #define	_IOFBF	0		/* setvbuf should set fully buffered */
 #define	_IOLBF	1		/* setvbuf should set line buffered */
 #define	_IONBF	2		/* setvbuf should set unbuffered */
+#endif
 
 #define	EOF	(-1)
 
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0
+
+extern _CONST int __aeabi_BUFSIZ;
+#define BUFSIZ (__aeabi_BUFSIZ)
+
+extern _CONST int __aeabi_FOPEN_MAX;
+#define FOPEN_MAX (__aeabi_FOPEN_MAX)
+
+extern _CONST int __aeabi_FILENAME_MAX;
+#define FILENAME_MAX (__aeabi_FILENAME_MAX)
+
+extern _CONST int __aeabi_L_tmpnam;
+#define L_tmpnam (__aeabi_L_tmpnam)
+
+extern _CONST int __aeabi_TMP_MAX;
+#define TMP_MAX (__aeabi_TMP_MAX)
+#else
 #ifdef __BUFSIZ__
 #define	BUFSIZ		__BUFSIZ__
 #else
@@ -141,9 +167,13 @@ typedef _fpos64_t fpos64_t;
 #define	L_tmpnam	FILENAME_MAX
 #endif
 
+#define TMP_MAX		26
+
 #if __BSD_VISIBLE || __XSI_VISIBLE
 #define P_tmpdir        "/tmp"
 #endif
+
+#endif /* _AEABI_PORTABILITY_LEVEL */
 
 #ifndef SEEK_SET
 #define	SEEK_SET	0	/* set file offset to offset */
@@ -155,11 +185,19 @@ typedef _fpos64_t fpos64_t;
 #define	SEEK_END	2	/* set file offset to EOF plus offset */
 #endif
 
-#define	TMP_MAX		26
 
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0
+extern FILE *__aeabi_stdin;
+extern FILE *__aeabi_stdout;
+extern FILE *__aeabi_stderr;
+#define stdin	(__aeabi_stdin)
+#define stdout	(__aeabi_stdout)
+#define stderr	(__aeabi_stderr)
+#else
 #define	stdin	(_REENT->_stdin)
 #define	stdout	(_REENT->_stdout)
 #define	stderr	(_REENT->_stderr)
+#endif /* _AEABI_PORTABILITY_LEVEL */
 
 #define _stdin_r(x)	((x)->_stdin)
 #define _stdout_r(x)	((x)->_stdout)
@@ -222,17 +260,16 @@ int	_EXFUN(puts, (const char *));
 int	_EXFUN(ungetc, (int, FILE *));
 size_t	_EXFUN(fread, (_PTR __restrict, size_t _size, size_t _n, FILE *__restrict));
 size_t	_EXFUN(fwrite, (const _PTR __restrict , size_t _size, size_t _n, FILE *));
+#if !defined(_AEABI_PORTABILITY_LEVEL) || _AEABI_PORTABILITY_LEVEL == 0
 #ifdef _COMPILING_NEWLIB
 int	_EXFUN(fgetpos, (FILE *, _fpos_t *));
-#else
-int	_EXFUN(fgetpos, (FILE *__restrict, fpos_t *__restrict));
-#endif
-int	_EXFUN(fseek, (FILE *, long, int));
-#ifdef _COMPILING_NEWLIB
 int	_EXFUN(fsetpos, (FILE *, const _fpos_t *));
 #else
+int	_EXFUN(fgetpos, (FILE *__restrict, fpos_t *__restrict));
 int	_EXFUN(fsetpos, (FILE *, const fpos_t *));
 #endif
+#endif /* _AEABI_PORTABILITY_LEVEL_ */
+int	_EXFUN(fseek, (FILE *, long, int));
 long	_EXFUN(ftell, ( FILE *));
 void	_EXFUN(rewind, (FILE *));
 void	_EXFUN(clearerr, (FILE *));
@@ -249,7 +286,8 @@ int	_EXFUN(rename, (const char *, const char *));
 int	_EXFUN(_rename, (const char *, const char *));
 #endif
 #endif
-#if __LARGEFILE_VISIBLE || __POSIX_VISIBLE >= 200112
+#if (__LARGEFILE_VISIBLE || __POSIX_VISIBLE >= 200112)
+     && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 #ifdef _COMPILING_NEWLIB
 int	_EXFUN(fseeko, (FILE *, _off_t, int));
 _off_t	_EXFUN(ftello, ( FILE *));
@@ -334,7 +372,7 @@ int	_EXFUN(vsniprintf, (char *, size_t, const char *, __VALIST)
  * Routines in POSIX 1003.1:2001.
  */
 
-#if __POSIX_VISIBLE
+#if __POSIX_VISIBLE && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 #ifndef _REENT_ONLY
 FILE *	_EXFUN(fdopen, (int, const char *));
 #endif
@@ -362,13 +400,13 @@ int	_EXFUN(ftrylockfile, (FILE *));
 void	_EXFUN(funlockfile, (FILE *));
 int	_EXFUN(putc_unlocked, (int, FILE *));
 int	_EXFUN(putchar_unlocked, (int));
-#endif
+#endif 
 
 /*
  * Routines in POSIX 1003.1:200x.
  */
 
-#if __POSIX_VISIBLE >= 200809
+#if __POSIX_VISIBLE >= 200809 && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 # ifndef _REENT_ONLY
 #  ifndef dprintf
 int	_EXFUN(dprintf, (int, const char *__restrict, ...)
@@ -578,7 +616,7 @@ int	_EXFUN(__swbuf_r, (struct _reent *, int, FILE *));
  * Stdio function-access interface.
  */
 
-#if __BSD_VISIBLE
+#if __BSD_VISIBLE && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 # ifdef __LARGE64_FILES
 FILE	*_EXFUN(funopen,(const _PTR __cookie,
 		int (*__readfn)(_PTR __c, char *__buf,
@@ -615,7 +653,7 @@ FILE	*_EXFUN(_funopen_r,(struct _reent *, const _PTR __cookie,
 					       (fpos_t (*)())0, (int (*)())0)
 # define	fwopen(__cookie, __fn) funopen(__cookie, (int (*)())0, __fn, \
 					       (fpos_t (*)())0, (int (*)())0)
-#endif /* __BSD_VISIBLE */
+#endif /* __BSD_VISIBLE && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0) */
 
 #if __GNU_VISIBLE
 typedef ssize_t cookie_read_function_t(void *__cookie, char *__buf, size_t __n);
@@ -691,11 +729,11 @@ _ELIDABLE_INLINE int __sputc_r(struct _reent *_ptr, int _c, FILE *_p) {
 	else
 		return (__swbuf_r(_ptr, _c, _p));
 }
-#else
+# else
 /*
  * This has been tuned to generate reasonable code on the vax using pcc
  */
-#define       __sputc_raw_r(__ptr, __c, __p) \
+#  define       __sputc_raw_r(__ptr, __c, __p) \
 	(--(__p)->_w < 0 ? \
 		(__p)->_w >= (__p)->_lbfsize ? \
 			(*(__p)->_p = (__c)), *(__p)->_p != '\n' ? \

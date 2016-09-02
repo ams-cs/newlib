@@ -59,12 +59,12 @@ ARFLAGS = cru
 lib_a_AR = $(AR) $(ARFLAGS)
 @MAY_SUPPLY_SYSCALLS_TRUE@am__DEPENDENCIES_1 = $(lpfx)libcfunc.o \
 @MAY_SUPPLY_SYSCALLS_TRUE@	$(lpfx)trap.o $(lpfx)syscalls.o
-@USE_LIBTOOL_FALSE@am_lib_a_OBJECTS = lib_a-aeabi_atexit.$(OBJEXT)
-lib_a_OBJECTS = $(am_lib_a_OBJECTS)
+lib_a_SOURCES = lib.c
+lib_a_OBJECTS = lib_a-lib.$(OBJEXT)
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libarm_la_LIBADD =
-@USE_LIBTOOL_TRUE@am_libarm_la_OBJECTS = aeabi_atexit.lo
-libarm_la_OBJECTS = $(am_libarm_la_OBJECTS)
+libarm_la_SOURCES = libarm.c
+libarm_la_OBJECTS = libarm.lo
 @USE_LIBTOOL_TRUE@am_libarm_la_rpath =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -83,8 +83,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(lib_a_SOURCES) $(EXTRA_lib_a_SOURCES) $(libarm_la_SOURCES) \
-	$(EXTRA_libarm_la_SOURCES)
+SOURCES = $(EXTRA_lib_a_SOURCES) lib.c $(EXTRA_libarm_la_SOURCES) \
+	libarm.c
 DATA = $(noinst_DATA)
 ETAGS = etags
 CTAGS = ctags
@@ -220,10 +220,8 @@ noinst_LIBRARIES = lib.a
 @MAY_SUPPLY_SYSCALLS_FALSE@extra_objs = 
 @MAY_SUPPLY_SYSCALLS_TRUE@extra_objs = $(lpfx)libcfunc.o $(lpfx)trap.o $(lpfx)syscalls.o
 @USE_LIBTOOL_TRUE@noinst_LTLIBRARIES = libarm.la
-@USE_LIBTOOL_TRUE@libarm_la_SOURCES = aeabi_atexit.c
 @USE_LIBTOOL_TRUE@EXTRA_libarm_la_SOURCES = trap.S syscalls.c libcfunc.c
 @USE_LIBTOOL_TRUE@noinst_DATA = objectlist.awk.in
-@USE_LIBTOOL_FALSE@lib_a_SOURCES = aeabi_atexit.c
 @USE_LIBTOOL_FALSE@lib_a_LIBADD = $(extra_objs)
 @USE_LIBTOOL_FALSE@EXTRA_lib_a_SOURCES = trap.S syscalls.c libcfunc.c
 @USE_LIBTOOL_FALSE@lib_a_DEPENDENCIES = $(extra_objs)
@@ -328,12 +326,6 @@ lib_a-trap.obj: trap.S
 .c.lo:
 	$(LTCOMPILE) -c -o $@ $<
 
-lib_a-aeabi_atexit.o: aeabi_atexit.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-aeabi_atexit.o `test -f 'aeabi_atexit.c' || echo '$(srcdir)/'`aeabi_atexit.c
-
-lib_a-aeabi_atexit.obj: aeabi_atexit.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-aeabi_atexit.obj `if test -f 'aeabi_atexit.c'; then $(CYGPATH_W) 'aeabi_atexit.c'; else $(CYGPATH_W) '$(srcdir)/aeabi_atexit.c'; fi`
-
 lib_a-syscalls.o: syscalls.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-syscalls.o `test -f 'syscalls.c' || echo '$(srcdir)/'`syscalls.c
 
@@ -345,6 +337,12 @@ lib_a-libcfunc.o: libcfunc.c
 
 lib_a-libcfunc.obj: libcfunc.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-libcfunc.obj `if test -f 'libcfunc.c'; then $(CYGPATH_W) 'libcfunc.c'; else $(CYGPATH_W) '$(srcdir)/libcfunc.c'; fi`
+
+lib_a-lib.o: lib.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lib.o `test -f 'lib.c' || echo '$(srcdir)/'`lib.c
+
+lib_a-lib.obj: lib.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lib.obj `if test -f 'lib.c'; then $(CYGPATH_W) 'lib.c'; else $(CYGPATH_W) '$(srcdir)/lib.c'; fi`
 
 mostlyclean-libtool:
 	-rm -f *.lo

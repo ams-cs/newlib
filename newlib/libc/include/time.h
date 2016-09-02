@@ -11,6 +11,11 @@
 #include <sys/cdefs.h>
 #include <sys/reent.h>
 
+  /* Indicate that we honor AEABI portability if requested.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
+# define _AEABI_PORTABLE
+#endif
+
 #define __need_size_t
 #define __need_NULL
 #include <stddef.h>
@@ -22,7 +27,13 @@
 #define _CLOCKS_PER_SEC_ 1000
 #endif
 
+#ifdef _AEABI_PORTABLE
+extern _CONST int __aeabi_CLOCKS_PER_SEC;
+#define CLOCKS_PER_SEC (__aeabi_CLOCKS_PER_SEC)
+#else
 #define CLOCKS_PER_SEC _CLOCKS_PER_SEC_
+#endif
+
 #define CLK_TCK CLOCKS_PER_SEC
 
 #include <sys/types.h>
@@ -51,6 +62,8 @@ struct tm
 #ifdef __TM_ZONE
   const char *__TM_ZONE;
 #endif
+  int  __extra_1;
+  int  __extra_2;
 };
 
 clock_t	   _EXFUN(clock,    (void));
@@ -87,6 +100,7 @@ _END_STD_C
 extern "C" {
 #endif
 
+#if !defined _AEABI_PORTABLE
 #if __XSI_VISIBLE
 char      *_EXFUN(strptime,     (const char *__restrict,
 				 const char *__restrict,
@@ -157,6 +171,7 @@ extern __IMPORT char *_tzname[2];
 #define tzname _tzname
 #endif
 #endif /* __POSIX_VISIBLE */
+#endif /* _AEABI_PORTABLE */
 
 #ifdef __cplusplus
 }

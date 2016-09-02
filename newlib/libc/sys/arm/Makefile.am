@@ -16,11 +16,9 @@ endif
 
 if USE_LIBTOOL
 noinst_LTLIBRARIES = libarm.la
-libarm_la_SOURCES = aeabi_atexit.c
 EXTRA_libarm_la_SOURCES = trap.S syscalls.c libcfunc.c
 noinst_DATA = objectlist.awk.in
 else
-lib_a_SOURCES = aeabi_atexit.c
 lib_a_LIBADD = $(extra_objs)
 EXTRA_lib_a_SOURCES = trap.S syscalls.c libcfunc.c
 lib_a_DEPENDENCIES = $(extra_objs)

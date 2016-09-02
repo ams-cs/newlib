@@ -1,3 +1,83 @@
+2016-09-02  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	Brooks Moses  <brooks@codesourcery.com>
+	Daniel Jacobowitz  <dan@codesourcery.com>
+	Nathan Froyd  <froydnj@codesourcery.com>
+	Julian Brown  <julian@codesourcery.com>
+	Paul Brook  <paul@codesourcery.com>
+
+	newlib/
+	* configure.host: Add AEABI support.
+	* configure.in: Likewise.
+	* configure: Regenerate.
+	* Makefile.am: Add AEABI support.
+	* Makefile.in: Regenerate.
+	* libc/aeabi/Makefile.am: New file.
+	* libc/aeabi/Makefile.in: New file.
+	* libc/aeabi/aclocal.m4 New file.
+	* libc/aeabi/aeabi.h: New file.
+	* libc/aeabi/aeabi_atexit.c: New file.
+	* libc/aeabi/aeabi_memclr.c: New file.
+	* libc/aeabi/aeabi_memcpy.c: New file.
+	* libc/aeabi/aeabi_memmove.c: New file.
+	* libc/aeabi/aeabi_memset.c: New file.
+	* libc/aeabi/clibabi_assert.c: New file.
+	* libc/aeabi/clibabi_ctype-gen.c: New file.
+	* libc/aeabi/clibabi_ctype.c: New file.
+	* libc/aeabi/clibabi_errno.c: New file.
+	* libc/aeabi/clibabi_limits.c: New file.
+	* libc/aeabi/clibabi_locale.c: New file.
+	* libc/aeabi/clibabi_math.c: New file.
+	* libc/aeabi/clibabi_setjmp.c: New file.
+	* libc/aeabi/clibabi_signal.c: New file.
+	* libc/aeabi/clibabi_signal_fns.S: New file.
+	* libc/aeabi/clibabi_stdio.c: New file.
+	* libc/aeabi/clibabi_stdlib.c: New file.
+	* libc/aeabi/clibabi_time.c: New file.
+	* libc/aeabi/hidden.h: New file.
+	* libc/include/ctype.h: Add AEABI support.
+	* libc/include/errno.h: Likewise.
+	* libc/include/limits.h: Likewise.
+	* libc/include/locale.h: Likewise.
+	* libc/include/machine/setjmp.h: Likewise.
+	* libc/include/math.h: Likewise.
+	* libc/include/setjmp.h: Likewise.
+	* libc/include/signal.h: Likewise.
+	* libc/include/stdio.h: Likewise.
+	* libc/include/stdlib.h: Likewise.
+	* libc/include/string.h: Likewise.
+	* libc/include/sys/errno.h: Likewise.
+	* libc/include/sys/reent.h: Likewise.
+	* libc/include/sys/signal.h: Likewise.
+	* libc/include/time.h: Likewise.
+	* libc/include/wchar.h: Likewise.
+	* libc/include/wctype.h: Likewise.
+	* libc/argz/Makefile.in: New file.
+	* libc/configure.in: Add AEABI support.
+	* libc/configure: Regenerate.
+	* libc/Makefile.in: Regenerate.
+	* libc/*/Makefile.in: Regenerate.
+	* libc/sys/arm/Makefile.am: Remove aeabi_atexit.
+	* libc/sys/arm/aeabi_atexit.c: Remove file.
+
+	newlib/testsuite/
+	* newlib.aeabi/aeabi.exp: New file.
+	* newlib.aeabi/compile-assert.c: New file.
+	* newlib.aeabi/compile-ctype.c: New file.
+	* newlib.aeabi/compile-errno.c: New file.
+	* newlib.aeabi/compile-limits.c: New file.
+	* newlib.aeabi/compile-locale.c: New file.
+	* newlib.aeabi/compile-math.c: New file.
+	* newlib.aeabi/compile-setjmp.c: New file.
+	* newlib.aeabi/compile-signal.c: New file.
+	* newlib.aeabi/compile-stdio.c: New file.
+	* newlib.aeabi/compile-stdlib.c: New file.
+	* newlib.aeabi/compile-time.c: New file.
+	* newlib.aeabi/compile-wchar.c: New file.
+	* newlib.aeabi/compile-wctype.c: New file.
+
 2016-09-01  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

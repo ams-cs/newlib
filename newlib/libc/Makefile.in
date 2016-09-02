@@ -92,7 +92,8 @@ am__DEPENDENCIES_1 =
 @USE_LIBTOOL_FALSE@	errno/lib.$(aext) misc/lib.$(aext) \
 @USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 @USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_2) \
-@USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+@USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+@USE_LIBTOOL_FALSE@	$(am__DEPENDENCIES_1)
 @USE_LIBTOOL_TRUE@am__DEPENDENCIES_3 = argz/libargz.$(aext) \
 @USE_LIBTOOL_TRUE@	stdlib/libstdlib.$(aext) \
 @USE_LIBTOOL_TRUE@	ctype/libctype.$(aext) \
@@ -106,7 +107,7 @@ am__DEPENDENCIES_1 =
 @USE_LIBTOOL_TRUE@	errno/liberrno.$(aext) misc/libmisc.$(aext) \
 @USE_LIBTOOL_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 @USE_LIBTOOL_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-@USE_LIBTOOL_TRUE@	$(am__DEPENDENCIES_1)
+@USE_LIBTOOL_TRUE@	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 am_libc_la_OBJECTS =
 libc_la_OBJECTS = $(am_libc_la_OBJECTS)
 libc_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -191,7 +192,7 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = argz stdlib ctype search stdio stdio64 string signal \
 	time locale sys reent @extra_dir@ errno misc machine unix \
-	posix syscalls iconv xdr .
+	posix syscalls iconv xdr aeabi .
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
 AR = @AR@
@@ -228,6 +229,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LD = @LD@
 LDFLAGS = @LDFLAGS@
+LIBC_AEABI_LIB = @LIBC_AEABI_LIB@
 LIBC_EXTRA_DEF = @LIBC_EXTRA_DEF@
 LIBC_EXTRA_LIB = @LIBC_EXTRA_LIB@
 LIBC_MACHINE_LIB = @LIBC_MACHINE_LIB@
@@ -337,6 +339,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = cygnus
+@HAVE_AEABI_DIR_TRUE@AEABI_SUBDIR = aeabi
 @HAVE_POSIX_DIR_TRUE@POSIX_SUBDIR = posix
 @HAVE_SIGNAL_DIR_TRUE@SIGNAL_SUBDIR = signal
 @HAVE_SYSCALL_DIR_TRUE@SYSCALLS_SUBDIR = syscalls
@@ -353,7 +356,7 @@ AUTOMAKE_OPTIONS = cygnus
 # Do not change the order without considering the doc impact.
 SUBDIRS = argz stdlib ctype search $(STDIO_SUBDIR) $(STDIO64_SUBDIR) string $(SIGNAL_SUBDIR) time locale sys reent \
 	$(extra_dir) errno misc machine $(UNIX_SUBDIR) $(POSIX_SUBDIR) $(SYSCALLS_SUBDIR) $(NEWLIB_ICONV_DIRS) \
-	$(XDR_SUBDIR) .
+	$(XDR_SUBDIR) $(AEABI_SUBDIR) .
 
 noinst_DATA = $(CRT0)
 @USE_LIBTOOL_TRUE@noinst_LTLIBRARIES = libc.la
@@ -378,7 +381,8 @@ noinst_DATA = $(CRT0)
 @USE_LIBTOOL_FALSE@	$(LIBC_SYSCALL_LIB) \
 @USE_LIBTOOL_FALSE@        $(NEWLIB_ICONV_LIBS) \
 @USE_LIBTOOL_FALSE@	$(LIBC_MACHINE_LIB) \
-@USE_LIBTOOL_FALSE@	$(LIBC_SYS_LIB)
+@USE_LIBTOOL_FALSE@	$(LIBC_SYS_LIB) \
+@USE_LIBTOOL_FALSE@	$(LIBC_AEABI_LIB)
 
 @USE_LIBTOOL_TRUE@SUBLIBS = \
 @USE_LIBTOOL_TRUE@	argz/libargz.$(aext) \
@@ -400,7 +404,8 @@ noinst_DATA = $(CRT0)
 @USE_LIBTOOL_TRUE@	$(LIBC_POSIX_LIB) \
 @USE_LIBTOOL_TRUE@	$(LIBC_SYSCALL_LIB) \
 @USE_LIBTOOL_TRUE@	$(LIBC_MACHINE_LIB) \
-@USE_LIBTOOL_TRUE@	$(LIBC_SYS_LIB)
+@USE_LIBTOOL_TRUE@	$(LIBC_SYS_LIB) \
+@USE_LIBTOOL_TRUE@	$(LIBC_AEABI_LIB)
 
 @USE_LIBTOOL_FALSE@noinst_LIBRARIES = libc.a
 libc_la_LDFLAGS = -Xcompiler -nostdlib

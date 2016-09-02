@@ -358,6 +358,11 @@ _BEGIN_STD_C
 #define _JBLEN 12
 #endif
 
+#ifdef _AEABI_PORTABLE
+#include <sys/_types.h>
+extern _CONST int __aeabi_JMP_BUF_SIZE;
+typedef __int64_t jmp_buf[];
+#else
 #ifdef _JBLEN
 #ifdef _JBTYPE
 typedef	_JBTYPE jmp_buf[_JBLEN];
@@ -365,6 +370,7 @@ typedef	_JBTYPE jmp_buf[_JBLEN];
 typedef	int jmp_buf[_JBLEN];
 #endif
 #endif
+#endif /* _AEABI_PORTABLE */
 
 _END_STD_C
 

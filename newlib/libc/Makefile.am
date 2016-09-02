@@ -2,6 +2,10 @@
 
 AUTOMAKE_OPTIONS = cygnus
 
+if HAVE_AEABI_DIR
+AEABI_SUBDIR = aeabi
+endif
+
 if HAVE_POSIX_DIR
 POSIX_SUBDIR = posix
 endif
@@ -42,7 +46,7 @@ endif
 # Do not change the order without considering the doc impact.
 SUBDIRS = argz stdlib ctype search $(STDIO_SUBDIR) $(STDIO64_SUBDIR) string $(SIGNAL_SUBDIR) time locale sys reent \
 	$(extra_dir) errno misc machine $(UNIX_SUBDIR) $(POSIX_SUBDIR) $(SYSCALLS_SUBDIR) $(NEWLIB_ICONV_DIRS) \
-	$(XDR_SUBDIR) .
+	$(XDR_SUBDIR) $(AEABI_SUBDIR) .
 
 noinst_DATA = $(CRT0)
 
@@ -68,7 +72,8 @@ SUBLIBS = \
 	$(LIBC_POSIX_LIB) \
 	$(LIBC_SYSCALL_LIB) \
 	$(LIBC_MACHINE_LIB) \
-	$(LIBC_SYS_LIB)
+	$(LIBC_SYS_LIB) \
+	$(LIBC_AEABI_LIB)
 else
 noinst_LIBRARIES = libc.a
 SUBLIBS = \
@@ -92,7 +97,8 @@ SUBLIBS = \
 	$(LIBC_SYSCALL_LIB) \
         $(NEWLIB_ICONV_LIBS) \
 	$(LIBC_MACHINE_LIB) \
-	$(LIBC_SYS_LIB)
+	$(LIBC_SYS_LIB) \
+	$(LIBC_AEABI_LIB)
 endif
 
 libc_la_LDFLAGS = -Xcompiler -nostdlib

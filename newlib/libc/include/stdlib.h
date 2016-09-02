@@ -10,6 +10,11 @@
 #include <machine/ieeefp.h>
 #include "_ansi.h"
 
+  /* Indicate that we honor AEABI portability if requested.  */
+#if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
+# define _AEABI_PORTABLE
+#endif
+
 #define __need_size_t
 #define __need_wchar_t
 #define __need_NULL
@@ -62,7 +67,12 @@ typedef int (*__compar_fn_t) (const _PTR, const _PTR);
 
 #define RAND_MAX __RAND_MAX
 
+#ifdef _AEABI_PORTABLE
+extern int _EXFUN(__aeabi_MB_CUR_MAX,(void));
+#define MB_CUR_MAX (__aeabi_MB_CUR_MAX())
+#else
 int	_EXFUN(__locale_mb_cur_max,(_VOID));
+#endif
 
 #define MB_CUR_MAX __locale_mb_cur_max()
 

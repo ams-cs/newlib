@@ -171,6 +171,7 @@ RUNTEST = `if test -f $(top_srcdir)/../dejagnu/runtest; then \
 	   fi`
 DIST_SUBDIRS = libc libm doc . @EXTRA_DIRS@
 ACLOCAL = @ACLOCAL@
+AEABI_OBJECTLIST = @AEABI_OBJECTLIST@
 AMTAR = @AMTAR@
 AR = @AR@
 AS = @AS@

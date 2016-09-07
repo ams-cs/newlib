@@ -286,8 +286,7 @@ int	_EXFUN(rename, (const char *, const char *));
 int	_EXFUN(_rename, (const char *, const char *));
 #endif
 #endif
-#if (__LARGEFILE_VISIBLE || __POSIX_VISIBLE >= 200112)
-     && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
+#if (__LARGEFILE_VISIBLE || __POSIX_VISIBLE >= 200112) && (!defined _AEABI_PORTABILITY_LEVEL || _AEABI_PORTABILITY_LEVEL == 0)
 #ifdef _COMPILING_NEWLIB
 int	_EXFUN(fseeko, (FILE *, _off_t, int));
 _off_t	_EXFUN(ftello, ( FILE *));

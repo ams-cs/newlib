@@ -1324,8 +1324,5 @@ _DEFUN (strtof, (s00, se),
   return retval;
  }
  
- #endif
-  return (float)retval;
-}
 
 #endif

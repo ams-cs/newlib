@@ -1,5 +1,11 @@
 2016-09-07  Catherine Moore  <clm@codesourcery.com>
 
+	newlib/
+	* libc/include/sys/errno.h: Fix merge error by providing
+	 missing #ifndef _AEABI_PORTABLE.
+
+2016-09-07  Catherine Moore  <clm@codesourcery.com>
+
 	Backport from upstream:
 
 	commit 65277df72d01e74558598e1769d4b722fb8b5f5b

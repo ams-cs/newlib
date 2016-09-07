@@ -84,6 +84,7 @@ extern __IMPORT char *program_invocation_short_name;
 #else
 # define	ERANGE 34	/* Math result not representable */
 #endif
+#ifndef _AEABI_PORTABLE
 #define	ENOMSG 35	/* No message of desired type */
 #define	EIDRM 36	/* Identifier removed */
 #ifdef __LINUX_ERRNO_EXTENSIONS__

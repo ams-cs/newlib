@@ -1,3 +1,16 @@
+2016-09-09  Catherine Moore  <clm@codesourcery.com>
+
+	Backport from upstream:
+
+	commit 2fb5e3dfb2603988640c87d69596f470900e1ff5
+	Author: Corinna Vinschen <corinna@vinschen.de>
+	Date:   Tue Aug 23 12:38:28 2016 +0200
+
+
+	commit fb8e88815e89cc4bee5e514ca9a21c9771a31f1c
+	Author: Corinna Vinschen <corinna@vinschen.de>
+	Date:   Tue Aug 23 13:08:01 2016 +0200
+
 2016-09-08  Catherine Moore  <clm@codesourcery.com>
 
 	newlib/

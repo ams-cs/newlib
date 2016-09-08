@@ -17,6 +17,7 @@ extern "C" {
 
 #ifdef NDEBUG           /* required by ANSI standard */
 # define assert(__e) ((void)0)
+#else
 #if defined _AEABI_PORTABLE
   void _EXFUN(__aeabi_assert, (const char *, const char *, int)
               _ATTRIBUTE ((__noreturn__)));

@@ -1,3 +1,9 @@
+2016-09-08  Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
+	* libc/include/assert.h: Fix merge error by providing
+	missing #else.
+
 2016-09-07  Catherine Moore  <clm@codesourcery.com>
 
 	newlib/

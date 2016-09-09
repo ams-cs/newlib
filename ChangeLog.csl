@@ -1,3 +1,19 @@
+2016-09-10  Catherine Moore  <clm@codesourcery.com>
+
+	Backport from upstream:
+
+	commit a703d64ad7edac344e4959e8d624ce1d8012678b
+	Author: Corinna Vinschen <corinna@vinschen.de>
+	Date:   Wed Aug 24 19:46:55 2016 +0200
+
+	commit e97109184ab0a2de680a90a432d94f86e5be7b0f
+	Author: Corinna Vinschen <corinna@vinschen.de>
+	Date:   Thu Aug 25 14:18:31 2016 +0200
+
+	commit b690df6bbdbf3cd2e92601e078f8aac535016678
+	Author: Corinna Vinschen <corinna@vinschen.de>
+	Date:   Thu Aug 25 16:05:12 2016 +0200
+
 2016-09-09  Catherine Moore  <clm@codesourcery.com>
 
 	Backport from upstream:

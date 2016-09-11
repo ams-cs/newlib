@@ -133,7 +133,7 @@
 #endif
 #endif
 
-#if defined(__mips__) && !defined(__rtems__)
+#if defined(__mips__) && !defined(__rtems__) && !defined(__PIC__)
 #define __ATTRIBUTE_IMPURE_PTR__ __attribute__((__section__(".sdata")))
 #endif
 

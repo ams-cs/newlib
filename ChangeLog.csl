@@ -2,6 +2,17 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2012-10-29  Meador Inge  <meadori@codesourcery.com>
+
+	CB-1663
+
+	newlib/
+	* libc/machine/mips/include/mips/asm.h: Add PTR_LA macro.
+
+2016-09-11  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2015-04-10  Meador Inge  <meadori@codesourcery.com>
 
 	newlib/

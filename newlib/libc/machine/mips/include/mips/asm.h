@@ -54,6 +54,7 @@
 #define LOG2_SZPTR	2	/* log2(4) */
 #define PTR_S		sw	/* store pointer */
 #define PTR_L		lw	/* load pointer */
+#define PTR_LA		la	/* load address */
 #define PTR_SUBU	subu	/* decrement pointer */
 #define PTR_ADDU	addu	/* increment pointer */
 #define PTR		.word	/* pointer type pseudo */                  
@@ -71,6 +72,7 @@
 #define LOG2_SZPTR	2	/* log2(4) */
 #define PTR_S		sw	/* store pointer */			   
 #define PTR_L		lw	/* load pointer */			   
+#define PTR_LA		la	/* load address */
 #define PTR_SUBU	subu	/* decrement pointer */			   
 #define PTR_ADDU	addu	/* increment pointer */			   
 #define PTR		.word	/* pointer type pseudo */                  
@@ -88,6 +90,7 @@
 #define LOG2_SZPTR	2	/* log2(4) */
 #define PTR_S		sw	/* store pointer */			   
 #define PTR_L		lw	/* load pointer */			   
+#define PTR_LA		la	/* load address */
 #define PTR_SUBU	subu	/* decrement pointer */			   
 #define PTR_ADDU	addu	/* increment pointer */			   
 #define PTR		.word	/* pointer type pseudo */                  
@@ -105,6 +108,7 @@
 #define LOG2_SZPTR	2	/* log2(4) */
 #define PTR_S		sw	/* store pointer */			   
 #define PTR_L		lw	/* load pointer */			   
+#define PTR_LA		la	/* load address */
 #define PTR_SUBU	subu	/* decrement pointer (SGI uses sub) */
 #define PTR_ADDU	addu	/* increment pointer (SGI uses add) */
 #define PTR		.word	/* pointer type pseudo */                  
@@ -122,6 +126,7 @@
 #define LOG2_SZPTR	3	/* log2(8) */
 #define PTR_S		sd	/* store pointer */			   
 #define PTR_L		ld	/* load pointer */			   
+#define PTR_LA		dla	/* load address */
 #define PTR_SUBU	dsubu	/* decrement pointer */			   
 #define PTR_ADDU	daddu	/* increment pointer */			   
 #define PTR		.dword	/* pointer type pseudo */                  

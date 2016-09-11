@@ -109,15 +109,18 @@ __extension__({ \
 
 #define fpa_setsr(val) \
 __extension__({ \
-    register unsigned __r = (val); \
-    __asm__ __volatile ("ctc1 %0,$31" : : "d" (__r)); \
-    __r; \
+    register unsigned __o, __n = (val); \
+    __asm__ __volatile ("cfc1 %0,$31" : "=d" (__o)); \
+    __n = (__o & FPA_CSR_NAN2008) | (__n & ~FPA_CSR_NAN2008); \
+    __asm__ __volatile ("ctc1 %0,$31" : : "d" (__n)); \
+    __n; \
 })
 
 #define fpa_xchsr(val) \
 __extension__({ \
     register unsigned __o, __n = (val); \
     __asm__ __volatile ("cfc1 %0,$31" : "=d" (__o)); \
+    __n = (__o & FPA_CSR_NAN2008) | (__n & ~FPA_CSR_NAN2008); \
     __asm__ __volatile ("ctc1 %0,$31" : : "d" (__n)); \
     __o; \
 })
@@ -127,7 +130,7 @@ __extension__({ \
 __extension__({ \
     register unsigned __o, __n; \
     __asm__ __volatile ("cfc1 %0,$31" : "=d" (__o)); \
-    __n = __o | (val); \
+    __n = __o | (val & ~FPA_CSR_NAN2008); \
     __asm__ __volatile ("ctc1 %0,$31" : : "d" (__n)); \
     __o; \
 })
@@ -137,7 +140,7 @@ __extension__({ \
 __extension__({ \
     register unsigned __o, __n; \
     __asm__ __volatile ("cfc1 %0,$31" : "=d" (__o)); \
-    __n = __o &~ (val); \
+    __n = __o & (~(val) | FPA_CSR_NAN2008); \
     __asm__ __volatile ("ctc1 %0,$31" : : "d" (__n)); \
     __o; \
 })
@@ -153,6 +156,9 @@ __extension__({ \
 /* 
  * FCSR - FPU Control & Status Register 
  */
+#define FPA_CSR_NAN2008	0x00040000	/* IEEE 754-2008 NaN encoding */
+#define FPA_CSR_ABS2008	0x00080000	/* non-arithmetic ABS/NEG */
+#define FPA_CSR_MAC2008	0x00100000	/* fused multiply-add */
 #define FPA_CSR_MD0	0x00200000	/* machine dependent */
 #define FPA_CSR_MD1	0x00400000	/* machine dependent */
 #define FPA_CSR_COND	0x00800000	/* $fcc0 */
@@ -201,6 +207,7 @@ __extension__({ \
 #define FPA_CSR_RD	0x3	/* towards -Infinity */
 
 /* FPU Implementation Register */
+#define FPA_FIR_HAS2008	0x00800000	/* implements IEEE 754-2008 features */
 #define FPA_FIR_F64	0x00400000	/* implements 64-bits registers */
 #define FPA_FIR_L	0x00200000	/* implements long fixed point */
 #define FPA_FIR_W	0x00100000	/* implements word fixed point */

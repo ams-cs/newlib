@@ -358,4 +358,23 @@ name:
 #define _MCOUNT
 #endif
 
+/*
+ * Load gp into `reg'.
+ * For PIC the base of the GOT is computed
+ * and put in `reg'.  Otherwise, `reg' is set
+ * to the small data section pointer _gp.
+ * Normally `reg' is $gp.
+ */
+#ifdef __PIC__
+#define LOAD_GP(reg) 			\
+	.set noreorder;			\
+	bal 1f;				\
+	nop;				\
+	1: .cpload $31;			\
+	.set reorder
+#else
+#define LOAD_GP(reg) 			\
+	PTR_LA	reg,_gp
+#endif
+
 #endif

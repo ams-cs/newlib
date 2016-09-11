@@ -1,5 +1,15 @@
 2016-09-11  Catherine Moore  <clm@codesourcery.com>
 
+	Merge from /csl/newlib/branches/2016.05:
+
+	2015-04-10  Meador Inge  <meadori@codesourcery.com>
+
+	newlib/
+	* libc/machine/mips/machine/asm.h (LOAD_GP): New macro.
+	* libc/machine/mips/include/mips/asm.h (LOAD_GP): Likewise.
+
+2016-09-11  Catherine Moore  <clm@codesourcery.com>
+
 	newlib/
 	* libc/include/sys/config.h (__ATTRIBUTE_IMPURE_PTR__): Do not use
 	the small data section for PIC multilibs.

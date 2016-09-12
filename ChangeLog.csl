@@ -1,3 +1,12 @@
+2016-09-12  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2011-08-08  Paul Brook  <paul@codesourcery.com>
+
+	newlib/
+	* libc/machine/mips/include/mips/m32c0.h: Add CFG3_ISAONEXC.
+
 2016-09-11  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

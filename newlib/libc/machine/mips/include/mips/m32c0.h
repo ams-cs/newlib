@@ -285,9 +285,10 @@ extern "C" {
 #define CFG2_SASHIFT	0
 
 /*
- * MIPS32r2 Config2 Register (CP0 Register 16, Select 3)
+ * MIPS32r2 Config3 Register (CP0 Register 16, Select 3)
  */
 #define CFG3_M		0x80000000	/* Config4 implemented */
+#define CFG3_ISAONEXC	0x00010000	/* ISA mode on exception entry */
 #define CFG3_DSPP	0x00000400	/* DSP ASE present */
 #define CFG3_LPA	0x00000080	/* Large physical addresses */
 #define CFG3_VEIC	0x00000040	/* Vectored external i/u controller */

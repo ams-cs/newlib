@@ -21,7 +21,9 @@ _BEGIN_STD_C
    can pretend that the integer values returned by and passed to
    functions are really pointers.  The necessary preprocessor macros are
    only defined in GCC versions >= 4.3, though.  */
-#if defined __GNUC__ && __GNUC__ >= 4 && __GNUC_MINOR__ >= 3 && __SIZEOF_INT__ == __SIZEOF_POINTER__
+#if (defined __GNUC__ \
+     && (__GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3)) \
+     && __SIZEOF_INT__ == __SIZEOF_POINTER__)
 # if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
 #  define _AEABI_PORTABLE
 # endif

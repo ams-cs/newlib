@@ -9,6 +9,7 @@
 
 #include "_ansi.h"
 #include <sys/cdefs.h>
+#include <sys/_locale.h>
 
   /* Indicate that we honor AEABI portability if requested.  */
 #if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE

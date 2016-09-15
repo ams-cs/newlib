@@ -72,9 +72,8 @@ extern int _EXFUN(__aeabi_MB_CUR_MAX,(void));
 #define MB_CUR_MAX (__aeabi_MB_CUR_MAX())
 #else
 int	_EXFUN(__locale_mb_cur_max,(_VOID));
-#endif
-
 #define MB_CUR_MAX __locale_mb_cur_max()
+#endif
 
 _VOID	_EXFUN(abort,(_VOID) _ATTRIBUTE ((__noreturn__)));
 int	_EXFUN(abs,(int));

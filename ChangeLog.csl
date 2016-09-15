@@ -1,5 +1,10 @@
 2016-09-15  Catherine Moore  <clm@codesourcery.com>
 
+	newlib/
+	* libc/include/stdlib.h (MB_CUR_MAX): Fix duplicate definition.
+
+2016-09-15  Catherine Moore  <clm@codesourcery.com>
+
 	Merge from /csl/newlib/branches/2016.05:
 
 	2015-10-23  Sandra Loosemore  <sandra@codesourcery.com>

@@ -2,6 +2,49 @@
 
 	Revert:
 
+	2016-08-29  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	* configure.ac (arm*-*-nucleuseabi): Add support.
+	* libtool.m4: Add support for nucleus.
+
+	newlib/
+	* configure.host: Add support for nucleus.
+	* configure, iconvdata/configure, libc/configure,
+        libc/machine/arm/configure, libc/machine/configure,
+        libc/machine/i386/configure, libc/sys/arm/configure,
+        libc/sys/configure, libc/sys/linux/configure,
+	libc/sys/linux/linuxthreads/configure,
+	libc/sys/linux/linuxthreads/machine/configure,
+	libc/sys/linux/linuxthreads/machine/i386/configure,
+	libc/sys/linux/machine/configure, 
+	libc/sys/linux/machine/i386/configure,
+        libm/configure, libm/machine/configure,
+	libm/machine/i386/configure: Regenerated.
+
+	2016-08-29  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2009-12-20  Joseph Myers  <joseph@codesourcery.com>
+ 
+ 	newlib/
+	* libc/machine/arm/Makefile.am: Add libtool code.  Include
+	Makefile.shared.
+	* libc/machine/arm/configure.in: Add libtool code.
+	* libc/machine/arm/Makefile.in, libc/machine/arm/aclocal.m4,
+	libc/machine/arm/configure: Regenerate.
+	* libc/sys/arm/Makefile.am: Add libtool code.  Include
+	Makefile.shared.
+	* libc/sys/arm/configure.in: Add libtool code.
+	* libc/sys/arm/Makefile.in, libc/sys/arm/aclocal.m4,
+	libc/sys/arm/configure: Regenerate.
+
+2016-09-15  Catherine Moore  <clm@codesourcery.com>
+
+	Revert:
+
 	2016-08-30  Catherine Moore  <clm@codesourcery.com>
 
 	Merge from /csl/newlib/branches/2016.05:

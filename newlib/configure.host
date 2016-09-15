@@ -367,13 +367,6 @@ case "${host}" in
     oext=lo
     lpfx=
     aext=la ;;
-  arm*-*-nucleuseabi*)
-    use_libtool=yes
-    oext=lo
-    lpfx=
-    aext=la
-    ldflags=-nostdlib
-    ;;
   *) ;; #shared library not supported for ${host}
 esac
 

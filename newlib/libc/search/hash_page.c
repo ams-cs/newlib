@@ -861,25 +861,19 @@ static int
 open_temp(hashp)
 	HTAB *hashp;
 {
-#ifndef _NO_SIGSET
 	sigset_t set, oset;
-#endif
 	static char namestr[] = "_hashXXXXXX";
 
 	/* Block signals; make sure file goes away at process exit. */
-#ifndef _NO_SIGSET
 	(void)sigfillset(&set);
 	(void)sigprocmask(SIG_BLOCK, &set, &oset);
-#endif
 	if ((hashp->fp = mkstemp(namestr)) != -1) {
 		(void)unlink(namestr);
 #ifdef HAVE_FCNTL
 		(void)fcntl(hashp->fp, F_SETFD, 1);
 #endif
 	}
-#ifndef _NO_SIGSET
 	(void)sigprocmask(SIG_SETMASK, &oset, (sigset_t *)NULL);
-#endif
 	return (hashp->fp != -1 ? 0 : -1);
 }
 

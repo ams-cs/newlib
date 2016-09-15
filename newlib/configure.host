@@ -614,12 +614,6 @@ case "${host}" in
         # turn off using cli/sti in i386 setjmp/longjmp
 	newlib_cflags="${newlib_cflags} -D_I386MACH_ALLOW_HW_INTERRUPTS"
 	;;
-  *-*-nucleus*)
-        # turn off unsupported items in posix directory 
-	newlib_cflags="${newlib_cflags} -D_NO_GETLOGIN -D_NO_GETPWENT -D_NO_GETUT -D_NO_GETPASS -D_NO_SIGSET"
-	newlib_cflags="${newlib_cflags} -DHAVE_RENAME -DHAVE_SYSTEM"
-	syscall_dir=syscalls
-	;;
 # VxWorks supplies its own version of malloc, and the newlib one
 # doesn't work because VxWorks does not have sbrk.
   *-wrs-vxworks*)

@@ -74,14 +74,6 @@ static char sccsid[] = "@(#)hash_bigkey.c	8.3 (Berkeley) 5/31/94";
 #include "page.h"
 #include "extern.h"
 
-/* Macros for min/max.  */
-#ifndef MIN
-#define MIN(a,b) (((a)<(b))?(a):(b))
-#endif
-#ifndef MAX
-#define MAX(a,b) (((a)>(b))?(a):(b))
-#endif
-
 static int collect_key(HTAB *, BUFHEAD *, int, DBT *, int);
 static int collect_data(HTAB *, BUFHEAD *, int, int);
 

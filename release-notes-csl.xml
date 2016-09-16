@@ -5,6 +5,20 @@
      relevant; it may be removed if it is relevant to all targets.
  -->
 
+      <!-- UUID: 173d4963-0703-44ce-854a-46eb44bbd3d4 -->
+      <!-- TARGET: * -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: -->
+      <formalpara>
+        <title>Newlib update</title>
+        <para>
+          The Newlib package has been updated to version 2.4.0,
+	  git revision 6f3943bca189a934a6a04576b9a83db625a87d9f.
+        </para>
+      </formalpara>
+
       <!-- UUID: 1d05c230-b979-48ca-9af5-b48d29a4b09e -->
       <!-- TARGET: arm-none-eabi arm-rockwell-eabi -->
       <!-- SORT: newlib -->

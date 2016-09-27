@@ -42,11 +42,11 @@
 extern "C" {
 #endif
 #define __SYS_SIGNAL_H
+#define _SYS__SIGSET_H_
 
-#if 0
-#include <sys/posix.h>
-#endif
-#if !defined(_ANSI_SOURCE) || defined(_POSIX_SOURCE)
+__extension__ typedef unsigned long long __sigset_t;
+
+#if !defined(_ANSI_SOURCE)
 #include <sys/types.h>
 #endif
 
@@ -54,36 +54,25 @@ extern "C" {
 #define SIGINT		2	/* interrupt */
 #define SIGQUIT		3	/* quit */
 #define SIGILL		4	/* illegal instruction */
-#ifndef _POSIX_SOURCE
 #define SIGTRAP		5	/* break point trap */
-#endif
 #define SIGABRT		6	/* abort */
-#ifndef _POSIX_SOURCE
 #define SIGIOT		SIGABRT
 #define SIGEMT		7	/* emulator trap */
-#endif
 #define SIGFPE		8	/* floating point exception */
 #define SIGKILL		9	/* kill */
-#ifndef _POSIX_SOURCE
 #define SIGBUS		10	/* bus error */
-#endif
 #define SIGSEGV		11	/* segmentation violation */
-#ifndef _POSIX_SOURCE
 #define SIGSYS		12	/* bad argument to system call */
-#endif
 #define SIGPIPE		13	/* write on a pipe with no one to read it */
 #define SIGALRM		14	/* alarm clock */
 #define SIGTERM		15	/* software termination signal */
-#ifndef _POSIX_SOURCE
 #define SIGURG		16	/* urgent condition (on socket) */
-#endif
 #define SIGSTOP		17	/* stop (cannot be caught or ignored) */
 #define SIGTSTP		18	/* interactive stop signal */
 #define SIGCONT		19	/* continue if stopped */
 #define SIGCHLD		20	/* child process terminated or stopped */
 #define SIGTTIN		21	/* to reader's process group on bg read */
 #define SIGTTOU		22	/* to writer's process group on bg write */
-#ifndef _POSIX_SOURCE
 #define	SIGIO		23	/* input/output possible signal */
 #define SIGPOLL		23	/* System V i/o possible */
 #define	SIGXCPU		24	/* exceeded CPU time limit */
@@ -92,7 +81,6 @@ extern "C" {
 #define	SIGPROF		27	/* profiling time alarm */
 #define SIGWINCH	28	/* window size changes */
 #define SIGINFO		29	/* information request */
-#endif
 #define SIGUSR1		30	/* user defined signal 1 */
 #define SIGUSR2		31	/* user defined signal 2 */
 
@@ -102,9 +90,9 @@ extern "C" {
 #endif
 
 #define _NSIG	65
-#ifndef _POSIX_SOURCE
+
 #define NSIG	_NSIG
-#endif
+
 
 /* ANSI C */
 #define	SIG_DFL		(void (*)())0
@@ -117,8 +105,6 @@ extern "C" {
 #define SIG_SETMASK	3
 
 #ifndef __ASSEMBLER__
-__extension__ typedef unsigned long long sigset_t;
-
 /* A type which can be written or read atomically, without signals intervening */
 typedef int sig_atomic_t;
 
@@ -158,7 +144,7 @@ int sigwaitinfo (const sigset_t *, siginfo_t *);
 int sigtimedwait (const sigset_t *, siginfo_t *, const struct timespec *);
 int sigwait (const sigset_t *, int *);
 int sigqueue (pid_t, int, const union sigval);
-
+extern void     _xcpt_sigcatch (int, int);
 #endif /* _POSIX_C_SOURCE >= 199309L */
 
 /* signal vector template */
@@ -175,7 +161,7 @@ struct sigaction {
   int		sa_flags;		/* BSD unsupport */
 };
 
-#if !defined(_ANSI_SOURCE) && !defined(_POSIX_SOURCE)
+#if !defined(_ANSI_SOURCE)
 /*
  * BSD 4.3 compatibility:
  * Signal vector "template" used in sigvec call.
@@ -194,12 +180,10 @@ struct  sigvec {
 #endif
 
 /* sa_flags */
-#ifndef _POSIX_SOURCE
 #define SA_ONSTACK 	0x0001		/* run on private stack */
 #define SA_RESTART 	0x0002		/* restart some system calls */
 #define SA_ONESHOT	0x0008		/* restore default handler */
 #define SA_RESETHAND	0x0008		/* ditto */
-#endif
 #define SA_NOCLDSTOP 	0x0004		/* no SIGCHLD for stopped procs */
 #define SA_SIGINFO 	0x0010		/* call sa_sigaction */
 
@@ -210,7 +194,7 @@ struct  sigvec {
 void	(*signal (int,void (*)(int))) (int);
 int	raise (int);
 
-#if !defined(_ANSI_SOURCE) || defined(_POSIX_SOURCE)
+#if !defined(_ANSI_SOURCE)
 int	kill (pid_t, int);
 int	sigaction (int, const struct sigaction *, struct sigaction *);
 int	sigpending (sigset_t *);

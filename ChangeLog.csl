@@ -1,6 +1,12 @@
 2016-09-27  Catherine Moore  <clm@codesourcery.com>
 
 	newlib/
+	* libc/machine/mips/machine/signal.h: Update POSIX guards.
+        * libc/machine/mips/signal.c: Change order of includes.
+
+2016-09-27  Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
 	* libc/include/sys/config.h (_READ_WRITE_RETURN_SIZE): Define
 	to ssize_t for MIPS.
 	(__ATTRIBUTE_IMPURE_PTR__): Do not place in .sdata for the MIPS

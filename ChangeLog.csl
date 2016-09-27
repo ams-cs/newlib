@@ -1,3 +1,11 @@
+2016-09-27  Catherine Moore  <clm@codesourcery.com>
+
+	newlib/
+	* libc/include/sys/config.h (_READ_WRITE_RETURN_SIZE): Define
+	to ssize_t for MIPS.
+	(__ATTRIBUTE_IMPURE_PTR__): Do not place in .sdata for the MIPS
+	PIC multilibs.
+
 2016-09-23  Catherine Moore  <clm@codesourcery.com>
 
 	newlib/

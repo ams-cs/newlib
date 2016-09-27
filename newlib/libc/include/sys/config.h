@@ -133,8 +133,11 @@
 #endif
 #endif
 
-#if defined(__mips__) && !defined(__rtems__) && !defined(__PIC__)
+#if defined(__mips__)
+#define _READ_WRITE_RETURN_TYPE _ssize_t
+#if !defined(__rtems__) && !defined(__PIC__)
 #define __ATTRIBUTE_IMPURE_PTR__ __attribute__((__section__(".sdata")))
+#endif
 #endif
 
 #ifdef __xstormy16__

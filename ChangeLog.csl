@@ -1,3 +1,9 @@
+2016-10-07  Andrew Jenner  <andrew@codesourcery.com>
+
+	newlib/
+	* configure.host (newlib_flags): Remove -mrelocatable-lib for
+	various powerpc bare-metal targets.
+
 2016-09-27  Catherine Moore  <clm@codesourcery.com>
 
 	newlib/

@@ -802,7 +802,7 @@ case "${host}" in
   powerpc*-*-sysv* | \
   powerpc*-*-solaris*)
 	default_newlib_io_long_long="yes"
-	newlib_cflags="${newlib_cflags} -mrelocatable-lib -mno-eabi -mstrict-align -DMISSING_SYSCALL_NAMES"
+	newlib_cflags="${newlib_cflags} -mno-eabi -mstrict-align -DMISSING_SYSCALL_NAMES"
 	;;
   powerpcle-*-pe)
 	newlib_cflags="${newlib_cflags} -DHAVE_OPENDIR -DHAVE_RENAME -DHAVE_FCNTL -D_NO_POSIX_SPAWN"

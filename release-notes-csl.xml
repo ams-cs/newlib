@@ -5,6 +5,21 @@
      relevant; it may be removed if it is relevant to all targets.
  -->
 
+      <!-- UUID: 9457e912-7460-4ec7-af65-3a6281b5bd07 -->
+      <!-- TARGET: arm* -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: -->
+      <formalpara>
+        <title>ARMv7 big-endian memcpy</title>
+        <para>
+          A bug that caused <function>memcpy</function> to operate
+          incorrectly for certain non-word-aligned copies in big-endian
+          mode on ARMv7 has been fixed.
+        </para>
+      </formalpara>
+
       <!-- UUID: 173d4963-0703-44ce-854a-46eb44bbd3d4 -->
       <!-- TARGET: * -->
       <!-- FEATURES: -->

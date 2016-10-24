@@ -1,3 +1,11 @@
+2016-10-24  Catherine Moore  <clm@codesourcery.com>
+
+	Issue ITS-48:
+
+	newlib/
+	* libc/libc.texinfo: Update version number to 2.4.
+	* libm/libm.texinfo: Update version number to 2.4.
+
 2016-10-07  Andrew Jenner  <andrew@codesourcery.com>
 
 	newlib/

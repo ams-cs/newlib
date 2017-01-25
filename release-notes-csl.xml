@@ -5,6 +5,37 @@
      relevant; it may be removed if it is relevant to all targets.
  -->
 
+      <!-- UUID: 22786739-af40-4fbe-8444-89d0a5f43e38 -->
+      <!-- TARGET: * -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: ITS-76 -->
+      <formalpara>
+        <title>Newlib optimized for code size</title>
+        <para>
+          The Newlib C library is now built with optimization for
+	  code size.  Most speed optimizations are still enabled.
+        </para>
+      </formalpara>
+
+      <!-- UUID: c2b999f1-0501-4528-8d20-4d9a8b0aa146 -->
+      <!-- TARGET: * -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: ITS-76 -->
+      <formalpara>
+        <title>Newlib C99 I/O support</title>
+        <para>
+	  C99 I/O features are now enabled in the Newlib C library.
+	  This includes additional format specifiers and the
+	  <function>vscanf</function> and <function>snprintf</function>
+	  families of functions.  This change may result in some increase
+	  in code size for programs using formatted I/O.
+       </para>
+      </formalpara>
+
       <!-- UUID: 9457e912-7460-4ec7-af65-3a6281b5bd07 -->
       <!-- TARGET: arm* -->
       <!-- FEATURES: -->

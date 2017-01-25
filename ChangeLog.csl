@@ -1,3 +1,10 @@
+2017-01-24  Sandra Loosemore  <sandra@codesourcery.com>
+
+	ITS-76
+
+	* release-notes-csl.xml (Newlib optimized for code size): New note.
+	(Newlib C99 I/O support): New note.
+
 2016-10-24  Catherine Moore  <clm@codesourcery.com>
 
 	Issue ITS-48:

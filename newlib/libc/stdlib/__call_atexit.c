@@ -37,9 +37,16 @@ extern char __libc_fini __attribute__((weak));
 
 /* Register the application finalization function with atexit.  These
    finalizers should run last.  Therefore, we want to call atexit as
-   soon as possible.  */
+   soon as possible.  However, if __atexit_lock is dynamically
+   initialized, that must happen first.  */
+#ifdef __NEWLIB_GTHR_GENERIC
+#define REGISTER_FINI_PRIORITY 1
+#else
+#define REGISTER_FINI_PRIORITY 0
+#endif
+
 static void 
-register_fini(void) __attribute__((constructor (0)));
+register_fini(void) __attribute__((constructor (REGISTER_FINI_PRIORITY)));
 
 static void 
 register_fini(void)

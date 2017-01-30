@@ -10,16 +10,16 @@
 typedef __gthread_mutex_t _LOCK_T;
 typedef __gthread_recursive_mutex_t _LOCK_RECURSIVE_T;
  
-#define __LOCK_INIT(class,lock)			\
-  class __gthread_mutex_t lock;		\
-  static __attribute__ ((__constructor__)) void	\
-  __init_##lock (void)				\
-  {						\
-    __generic_gxx_mutex_init_function (&lock);	\
+#define __LOCK_INIT(class,lock)				\
+  class __gthread_mutex_t lock;				\
+  static __attribute__ ((__constructor__ (0))) void	\
+  __init_##lock (void)					\
+  {							\
+    __generic_gxx_mutex_init_function (&lock);		\
   }
 #define __LOCK_INIT_RECURSIVE(class,lock)			\
   class __gthread_recursive_mutex_t lock;			\
-  static __attribute__ ((__constructor__)) void			\
+  static __attribute__ ((__constructor__ (0))) void		\
   __init_##lock (void)						\
   {								\
     __generic_gxx_recursive_mutex_init_function (&lock);	\

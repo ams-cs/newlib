@@ -2,6 +2,18 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2015-08-18  Joseph Myers  <joseph@codesourcery.com>
+
+	newlib/
+	* libc/include/sys/lock.h [__NEWLIB_GTHR_GENERIC] (__LOCK_INIT,
+	__LOCK_INIT_RECURSIVE): Use constructor priority 0.
+	* libc/stdlib/__call_atexit.c (REGISTER_FINI_PRIORITY): New macro.
+	(register_fini): Use REGISTER_FINI_PRIORITY as priority.
+
+2017-01-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2015-08-07  Joseph Myers  <joseph@codesourcery.com>
 
 	newlib/

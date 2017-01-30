@@ -2,6 +2,19 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2015-08-07  Joseph Myers  <joseph@codesourcery.com>
+
+	newlib/
+	* libc/include/sys/config.h [__NEWLIB_GTHR_GENERIC]
+	(__DYNAMIC_REENT__): Define.
+	* libc/include/sys/lock.h [__NEWLIB_GTHR_GENERIC]: Include
+	<gthr-generic.h>.  Define types and macros in terms of
+	gthr-generic interfaces.
+
+2017-01-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2009-06-26  Nathan Froyd  <froydnj@codesourcery.com>
 
 	newlib/

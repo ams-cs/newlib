@@ -2,6 +2,16 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2015-08-19  Joseph Myers  <joseph@codesourcery.com>
+
+	newlib/
+	* libc/include/sys/config.h [__i386__] (_READ_WRITE_RETURN_TYPE):
+	Define to _ssize_t.
+
+2017-01-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2015-08-18  Joseph Myers  <joseph@codesourcery.com>
 
 	newlib/

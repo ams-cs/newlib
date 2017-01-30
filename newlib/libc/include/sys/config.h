@@ -84,6 +84,9 @@
 #endif
 
 #ifdef __i386__
+/* CSL LOCAL */
+/* For compatibility with CS3.  */
+#define _READ_WRITE_RETURN_TYPE _ssize_t
 #ifndef __unix__
 /* in other words, go32 */
 #define _FLOAT_RET double

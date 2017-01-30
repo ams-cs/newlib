@@ -206,12 +206,14 @@
 #define LEAF(name) 			\
   	_TEXT_SECTION_NAMED(name);	\
   	.globl	name; 			\
+	.balign	4;			\
   	.ent	name; 			\
 name:
 
 /* Static/Local leaf function. */
 #define SLEAF(name) 			\
   	_TEXT_SECTION_NAMED(name);	\
+	.balign	4;			\
   	.ent	name; 			\
 name:
 
@@ -219,6 +221,7 @@ name:
 #define WLEAF(name) 			\
   	_TEXT_SECTION_NAMED(name);	\
   	.weakext name; 			\
+	.balign	4;			\
   	.ent	name; 			\
 name:
 
@@ -226,6 +229,7 @@ name:
 #define ALEAF(name,alias) 		\
   	_TEXT_SECTION_NAMED(name);	\
   	.weakext alias,name; 		\
+	.balign	4;			\
   	.ent	name; 			\
 name:
 
@@ -236,12 +240,14 @@ name:
 /* Global alternative entrypoint. */
 #define AENT(name) 			\
   	.globl	name; 			\
+	.balign	4;			\
   	.aent	name; 			\
 name:
 #define XLEAF(name)	AENT(name)
 
 /* Local/static alternative entrypoint. */
 #define SAENT(name) 			\
+	.balign	4;			\
   	.aent	name; 			\
 name:
 #define SXLEAF(name)	SAENT(name)
@@ -255,6 +261,7 @@ name:
 #define NESTED(name, framesz, rareg)	\
   	_TEXT_SECTION_NAMED(name);	\
   	.globl	name; 			\
+	.balign	4;			\
   	.ent	name; 			\
 	.frame	sp, framesz, rareg;	\
 name:
@@ -262,6 +269,7 @@ name:
 /* Static/Local nested function. */
 #define SNESTED(name, framesz, rareg)	\
   	_TEXT_SECTION_NAMED(name);	\
+	.balign	4;			\
   	.ent	name; 			\
 	.frame	sp, framesz, rareg;	\
 name:
@@ -270,6 +278,7 @@ name:
 #define WNESTED(name, framesz, rareg)	\
   	_TEXT_SECTION_NAMED(name);	\
   	.weakext name; 			\
+	.balign	4;			\
   	.ent	name; 			\
 	.frame	sp, framesz, rareg;	\
 name:
@@ -278,6 +287,7 @@ name:
 #define ANESTED(name, alias, framesz, rareg) \
   	_TEXT_SECTION_NAMED(name);	\
     	.weakext alias, name;		\
+	.balign	4;			\
   	.ent	name; 			\
 	.frame	sp, framesz, rareg;	\
 name:

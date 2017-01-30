@@ -2,6 +2,17 @@
 
 	Merge from /csl/newlib/branches/2016.05:
 
+	2009-06-26  Nathan Froyd  <froydnj@codesourcery.com>
+
+	newlib/
+	* libc/machine/mips/include/mips.asm.h (LEAF): Align the function
+	being defined to a four byte boundary.
+	(SLEAF, WLEAF, ALEAF, AENT, SAENT, NESTED, WNESTED, ANESTED): Likewise.
+ 
+2017-01-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
 	2009-09-21  Daniel Gutson  <dgutson@codesourcery.com>
 
 	Issue #3768.

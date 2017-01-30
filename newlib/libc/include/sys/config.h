@@ -243,6 +243,10 @@
 #define _REENT_GLOBAL_ATEXIT
 #endif
 
+#if defined(__NEWLIB_GTHR_GENERIC)
+#define __DYNAMIC_REENT__
+#endif
+
 #ifndef __EXPORT
 #define __EXPORT
 #endif

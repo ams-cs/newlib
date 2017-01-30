@@ -1,3 +1,15 @@
+2017-01-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2009-09-21  Daniel Gutson  <dgutson@codesourcery.com>
+
+	Issue #3768.
+
+	newlib/
+	* configure.host (case arm-*-*): -DHAVE_RENAME and -DHAVE_SYSTEM
+	added to the newlib cflags.
+
 2017-01-24  Sandra Loosemore  <sandra@codesourcery.com>
 
 	ITS-76

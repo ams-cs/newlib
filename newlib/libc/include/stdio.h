@@ -756,8 +756,8 @@ _ELIDABLE_INLINE int __sputc_r(struct _reent *_ptr, int _c, FILE *_p) {
 #define	__sfileno(p)	((p)->_file)
 
 #ifndef _REENT_SMALL
-#define	feof(p)		__sfeof(p)
-#define	ferror(p)	__sferror(p)
+#define	feof(p)		((int)__sfeof(p))
+#define	ferror(p)	((int)__sferror(p))
 #define	clearerr(p)	__sclearerr(p)
 
 #if __MISC_VISIBLE

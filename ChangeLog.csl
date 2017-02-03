@@ -1,3 +1,11 @@
+2017-02-02  Catherine Moore  <clm@codesourcery.com>
+
+	Merge from /csl/newlib/branches/2016.05:
+
+	2014-12-11  Jonathan Roelofs  <jonathan@codesourcery.com>
+
+	* libc/include/stdio.h: Fix type signature of feof and ferror in c++.
+
 2017-01-31  Catherine Moore  <clm@codesourcery.com>
 
 	ITS-81

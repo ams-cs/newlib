@@ -5,6 +5,20 @@
      relevant; it may be removed if it is relevant to all targets.
  -->
 
+      <!-- UUID: 7648ff7c-3411-4b5a-b635-7de816e2d879 -->
+      <!-- TARGET: arm-none-eabi aarch64-none-elf powerpc-eabi mips-sde-elf arm-altera-eabi -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: ITS-81 -->
+      <formalpara>
+        <title>Thread-safe library bug</title>
+        <para>
+	  A bug has been fixed that disabled thread safety in the
+	  libraries included with &csl_prod; for &csl_target_name;.
+        </para>
+      </formalpara>
+
       <!-- UUID: 22786739-af40-4fbe-8444-89d0a5f43e38 -->
       <!-- TARGET: * -->
       <!-- FEATURES: -->

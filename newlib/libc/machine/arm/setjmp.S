@@ -15,11 +15,7 @@
 #define SYM(x) CONCAT (__USER_LABEL_PREFIX__, x)
 
 #ifdef __ELF__
-#if defined(CLANG_IAS)
-#define TYPE(x) .type SYM(x),%function
-#else
 #define TYPE(x) .type SYM(x),function
-#endif
 #define SIZE(x) .size SYM(x), . - SYM(x)
 #else
 #define TYPE(x)
@@ -78,19 +74,11 @@ SYM (setjmp):
 	mov	r5, sp
 	mov	r6, lr
 	stmia	r0!, {r1, r2, r3, r4, r5, r6}
-#if defined(CLANG_IAS)
-	subs	r0, #40
-#else
 	sub	r0, r0, #40
-#endif
 	/* Restore callee-saved low regs.  */
 	ldmia	r0!, {r4, r5, r6, r7}
 	/* Return zero.  */
-#if defined(CLANG_IAS)
-	movs	r0, #0
-#else
 	mov	r0, #0
-#endif
 	bx lr
 
 .thumb_func
@@ -98,11 +86,7 @@ SYM (setjmp):
 	TYPE (longjmp)
 SYM (longjmp):
 	/* Restore High regs.  */
-#if defined(CLANG_IAS)
-	adds	r0, #16
-#else
 	add	r0, r0, #16
-#endif
 	ldmia	r0!, {r2, r3, r4, r5, r6}
 	mov	r8, r2
 	mov	r9, r3
@@ -111,20 +95,12 @@ SYM (longjmp):
 	mov	sp, r6
 	ldmia	r0!, {r3} /* lr */
 	/* Restore low regs.  */
-#if defined(CLANG_IAS)
-	subs	r0, #40
-#else
 	sub	r0, r0, #40
-#endif
 	ldmia	r0!, {r4, r5, r6, r7}
 	/* Return the result argument, or 1 if it is zero.  */
 	mov	r0, r1
 	bne	1f
-#if defined(CLANG_IAS)
-	movs	r0, #1
-#else
 	mov	r0, #1
-#endif
 1:
 	bx	r3
 
@@ -172,25 +148,27 @@ SYM (.arm_start_of.\name):
 .macro PROLOGUE name
 .endm
 #endif
-#define FUNC_START(name) \
-	.text ;\
-	.align 2 ;\
-	MODE ;\
-	.globl SYM(name) ;\
-	TYPE(name) ;\
-SYM(name):\
-	PROLOGUE name
+	
+.macro FUNC_START name
+	.text
+	.align 2
+	MODE
+	.globl SYM (\name)
+	TYPE (\name)
+SYM (\name):
+	PROLOGUE \name
+.endm
 
-#define FUNC_END(name) \
-	RET ; \
-	SIZE(name)
-
-
+.macro FUNC_END name
+	RET
+	SIZE (\name)
+.endm
+	
 /* --------------------------------------------------------------------
                  int setjmp (jmp_buf); 
    -------------------------------------------------------------------- */
 	
-	FUNC_START(setjmp)
+	FUNC_START setjmp
 
 	/* Save all the callee-preserved registers into the jump buffer.  */
 #ifdef __thumb2__
@@ -209,13 +187,13 @@ SYM(name):\
 	/* When setting up the jump buffer return 0.  */
 	mov		a1, #0
 
-	FUNC_END(setjmp)
+	FUNC_END setjmp
 	
 /* --------------------------------------------------------------------
 		volatile void longjmp (jmp_buf, int);
    -------------------------------------------------------------------- */
 	
-	FUNC_START(longjmp)
+	FUNC_START longjmp
 
 	/* If we have stack extension code it ought to be handled here.  */
 	
@@ -241,5 +219,5 @@ SYM(name):\
 #endif
 	moveq		a1, #1
 
-	FUNC_END(longjmp)
+	FUNC_END longjmp
 #endif

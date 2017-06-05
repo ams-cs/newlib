@@ -3,11 +3,7 @@
 	.macro sigfn name val
 	.global __aeabi_\name
 	.hidden __aeabi_\name
-#if defined(CLANG_IAS)
-	.type __aeabi_\name, %function
-#else
 	.type __aeabi_\name, function
-#endif
 	.set __aeabi_\name, \val
 	.endm
 	

@@ -54,13 +54,6 @@
 size_t __attribute__((naked))
 strlen (const char* str)
 {
-  asm (
-        OPTPLD_MACRO
-        RETURN_MACRO
-        "len .req r0\n\t"
-        "data .req r3\n\t"
-        "addr .req r1\n\t"
- 
   asm ("len .req r0\n\t"
        "data .req r3\n\t"
        "addr .req r1\n\t"

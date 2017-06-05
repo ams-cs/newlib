@@ -42,8 +42,6 @@ char* __attribute__((naked))
 strcpy (char* dst, const char* src)
 {
   asm (
-       OPTPLD_MACRO
-       RETURN_MACRO
 #if !(defined(__OPTIMIZE_SIZE__) || defined (PREFER_SIZE_OVER_SPEED) || \
       (defined (__thumb__) && !defined (__thumb2__)))
        "optpld	r1\n\t"
@@ -125,15 +123,15 @@ strcpy (char* dst, const char* src)
 #ifdef __ARMEB__
        "tst	r2, #0xff00\n\t"
        "iteet	ne\n\t"
-       "strhne	r2, [ip], #2\n\t"
+       "strneh	r2, [ip], #2\n\t"
        "lsreq	r2, r2, #8\n\t"
-       "strbeq	r2, [ip]\n\t"
+       "streqb	r2, [ip]\n\t"
        "tstne	r2, #0xff\n\t"
 #else
        "tst	r2, #0xff\n\t"
        "itet	ne\n\t"
-       "strhne	r2, [ip], #2\n\t"
-       "strbeq	r2, [ip]\n\t"
+       "strneh	r2, [ip], #2\n\t"
+       "streqb	r2, [ip]\n\t"
        "tstne	r2, #0xff00\n\t"
 #endif
        "bne	5b\n\t"

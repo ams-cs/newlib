@@ -263,6 +263,7 @@ case $basic_machine in
 	| fido | fr30 | frv | ft32 \
 	| h8300 | h8500 | hppa | hppa1.[01] | hppa2.0 | hppa2.0[nw] | hppa64 \
 	| hexagon \
+	| amdgcn \
 	| i370 | i860 | i960 | ia64 \
 	| ip2k | iq2000 \
 	| k1om \
@@ -301,6 +302,7 @@ case $basic_machine in
 	| open8 | or1k | or1knd | or32 \
 	| pdp10 | pdp11 | pj | pjl \
 	| powerpc | powerpc64 | powerpc64le | powerpcle \
+	| pru \
 	| pyramid \
 	| riscv32 | riscv64 \
 	| rl78 | rx \
@@ -428,6 +430,7 @@ case $basic_machine in
 	| orion-* \
 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
+	| pru-* \
 	| pyramid-* \
 	| riscv32-* | riscv64-* \
 	| rl78-* | romp-* | rs6000-* | rx-* \
@@ -643,6 +646,14 @@ case $basic_machine in
 		basic_machine=m68k-bull
 		os=-sysv3
 		;;
+	e500v[12])
+		basic_machine=powerpc-unknown
+		os=$os"spe"
+		;;
+	e500v[12]-*)
+		basic_machine=powerpc-`echo $basic_machine | sed 's/^[^-]*-//'`
+		os=$os"spe"
+		;;
 	ebmon29k)
 		basic_machine=a29k-amd
 		os=-ebmon
@@ -660,6 +671,9 @@ case $basic_machine in
 		;;
 	fx2800)
 		basic_machine=i860-alliant
+		;;
+	amdgcn)
+		basic_machine=amdgcn-unknown
 		;;
 	genix)
 		basic_machine=ns32k-ns
@@ -1022,7 +1036,7 @@ case $basic_machine in
 	ppc-* | ppcbe-*)
 		basic_machine=powerpc-`echo $basic_machine | sed 's/^[^-]*-//'`
 		;;
-	ppcle | powerpclittle | ppc-le | powerpc-little)
+	ppcle | powerpclittle)
 		basic_machine=powerpcle-unknown
 		;;
 	ppcle-* | powerpclittle-*)
@@ -1032,7 +1046,7 @@ case $basic_machine in
 		;;
 	ppc64-*) basic_machine=powerpc64-`echo $basic_machine | sed 's/^[^-]*-//'`
 		;;
-	ppc64le | powerpc64little | ppc64-le | powerpc64-little)
+	ppc64le | powerpc64little)
 		basic_machine=powerpc64le-unknown
 		;;
 	ppc64le-* | powerpc64little-*)
@@ -1387,9 +1401,9 @@ case $os in
 	      | -bosx* | -nextstep* | -cxux* | -aout* | -elf* | -oabi* \
 	      | -ptx* | -coff* | -ecoff* | -winnt* | -domain* | -vsta* \
 	      | -udi* | -eabi* | -lites* | -ieee* | -go32* | -aux* \
-	      | -chorusos* | -chorusrdb* | -cegcc* \
+	      | -chorusos* | -chorusrdb* | -cegcc* | -glidix* \
 	      | -cygwin* | -msys* | -pe* | -psos* | -moss* | -proelf* | -rtems* \
-	      | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
+	      | -midipix* | -mingw32* | -mingw64* | -linux-gnu* | -linux-android* \
 	      | -linux-newlib* | -linux-musl* | -linux-uclibc* \
 	      | -uxpv* | -beos* | -mpeix* | -udk* | -moxiebox* \
 	      | -interix* | -uwin* | -mks* | -rhapsody* | -darwin* | -opened* \
@@ -1533,6 +1547,8 @@ case $os in
 		;;
 	-ios)
 		;;
+	-amdhsa)
+		;;
 	-none)
 		;;
 	*)
@@ -1560,6 +1576,9 @@ case $basic_machine in
 		;;
 	spu-*)
 		os=-elf
+		;;
+	amdgcn-*)
+		os=-amdhsa
 		;;
 	*-acorn)
 		os=-riscix1.2
@@ -1627,6 +1646,9 @@ case $basic_machine in
 		;;
 	sparc-* | *-sun)
 		os=-sunos4.1.1
+		;;
+	pru-*)
+		os=-elf
 		;;
 	*-be)
 		os=-beos

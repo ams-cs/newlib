@@ -83,7 +83,7 @@
 #define _FLOAT_RET double
 #endif
 
-#ifdef __i386__
+#if defined __i386__ || defined __x86_64__
 /* CSL LOCAL */
 /* For compatibility with CS3.  */
 #define _READ_WRITE_RETURN_TYPE _ssize_t

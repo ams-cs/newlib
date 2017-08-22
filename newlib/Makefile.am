@@ -77,18 +77,24 @@ toollibdir = $(tooldir)/lib$(MULTISUBDIR)
 
 AR_FLAGS = rc
 
+noinst_DATA = stmp-targ-include
+
 if USE_LIBTOOL
 toollib_LTLIBRARIES = libm.la \
 	libc.la
 else
 toollib_LIBRARIES = libm.a \
 	libc.a
+if HAVE_MULTISUBDIR
+BUILD_MULTISUBDIR = $(builddir)$(MULTISUBDIR)
+if HAVE_CRT0
+noinst_DATA += $(BUILD_MULTISUBDIR)/$(CRT0)
+endif
+noinst_DATA += $(BUILD_MULTISUBDIR)/libc.a $(BUILD_MULTISUBDIR)/libm.a
+endif
 endif
 
-noinst_DATA = stmp-targ-include
-
 toollib_DATA = $(CRT0) $(CRT1)
-
 
 # The functions ldexp, frexp and modf are traditionally supplied in
 # both libc.a and libm.a.  We build them in libm.a and copy them over,
@@ -106,8 +112,7 @@ MATHOBJS_IN_LIBC = \
 	$(lpfx)sf_modf.$(oext) $(lpfx)s_scalbn.$(oext) \
 	$(lpfx)sf_scalbn.$(oext) \
 	$(lpfx)s_finite.$(oext) $(lpfx)sf_finite.$(oext) \
-	$(lpfx)s_copysign.$(oext) $(lpfx)sf_copysign.$(oext) \
-	$(lpfx)s_infconst.$(oext)
+	$(lpfx)s_copysign.$(oext) $(lpfx)sf_copysign.$(oext)
 
 LIBC_OBJECTLISTS = \
 	$(POSIX_OBJECTLIST) \
@@ -171,23 +176,40 @@ libc/libc.a: ; @true
 
 libm.a: libm/libm.a
 	rm -f $@
-	ln libm/libm.a $@ >/dev/null 2>/dev/null || cp libm/libm.a $@
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
 
 libm/libm.a: ; @true
 
 endif # USE_LIBTOOL
 
+if HAVE_MULTISUBDIR
+$(BUILD_MULTISUBDIR):
+	$(MKDIR_P) $@
+
+$(BUILD_MULTISUBDIR)/crt0.o: $(CRT0_DIR)$(CRT0) $(BUILD_MULTISUBDIR)
+	rm -f $@
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
+
+$(BUILD_MULTISUBDIR)/libc.a: libc.a $(BUILD_MULTISUBDIR)
+	rm -f $@ $(BUILD_MULTISUBDIR)/libg.a
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
+	ln libg.a $(BUILD_MULTISUBDIR)/libg.a >/dev/null 2>/dev/null || \
+	cp libg.a $(BUILD_MULTISUBDIR)/libg.a
+
+$(BUILD_MULTISUBDIR)/libm.a: libm.a $(BUILD_MULTISUBDIR)
+	rm -f $@
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
+endif
+
 crt0.o: $(CRT0_DIR)$(CRT0)
 	rm -f $@
-	ln $(CRT0_DIR)$(CRT0) $@ >/dev/null 2>/dev/null \
-	 || cp $(CRT0_DIR)$(CRT0) $@
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
 
 $(CRT0_DIR)$(CRT0): ; @true
 
 crt1.o: $(CRT1_DIR)$(CRT1)
 	rm -f $@
-	ln $< $@ >/dev/null 2>/dev/null \
-	 || cp $< $@
+	ln $< $@ >/dev/null 2>/dev/null || cp $< $@
 
 $(CRT1_DIR)$(CRT1): ; @true
 
@@ -378,6 +400,7 @@ doc/makedoc:
 
 # Recursive targets for man and install-man
 man:
+	(cd doc && $(MAKE) man-cache) || exit 1; \
 	for d in $(SUBDIRS); do \
 	  if test "$$d" != "."; then \
 	    (cd $$d && $(MAKE) man) || exit 1; \

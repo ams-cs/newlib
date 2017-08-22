@@ -1293,10 +1293,15 @@ _DEFUN (strtod, (s00, se),
 float
 strtof_l (const char *__restrict s00, char **__restrict se, locale_t loc)
 {
-  double retval = _strtod_l (_REENT, s00, se, loc);
-  if (isnan (retval))
+  double val = _strtod_l (_REENT, s00, se, loc);
+  if (isnan (val))
     return nanf (NULL);
-  return (float)retval;
+  float retval = (float) val;
+#ifndef NO_ERRNO
+  if (isinf (retval) && !isinf (val))
+    _REENT->_errno = ERANGE;
+#endif
+  return retval;
 }
 
 float
@@ -1304,25 +1309,16 @@ _DEFUN (strtof, (s00, se),
 	_CONST char *__restrict s00 _AND
 	char **__restrict se)
 {
-  double d;
-  float retval;
-
-  d = _strtod_l (_REENT, s00, se, __get_current_locale ());
-  retval = (float) d;
-
+  double val = _strtod_l (_REENT, s00, se, __get_current_locale ());
+  if (isnan (val))
+    return nanf (NULL);
+  float retval = (float) val;
 #ifndef NO_ERRNO
-  /* Check for out-of-range values.  */
-  if (/* Underflow.  */
-      (!retval && d)
-      /* Positive overflow.  */
-      || (retval == HUGE_VALF && d != HUGE_VAL)
-      /* Negative overflow.  */
-      || (retval == -HUGE_VALF && d != -HUGE_VAL))
+  if (isinf (retval) && !isinf (val)
+      || !retval && val)
     _REENT->_errno = ERANGE;
 #endif
-
   return retval;
- }
- 
+}
 
 #endif

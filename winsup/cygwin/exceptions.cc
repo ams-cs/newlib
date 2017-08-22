@@ -175,15 +175,12 @@ cygwin_exception::dump_exception ()
 {
   const char *exception_name = NULL;
 
-  if (e)
+  for (int i = 0; status_info[i].name; i++)
     {
-      for (int i = 0; status_info[i].name; i++)
+      if (status_info[i].code == (NTSTATUS) e->ExceptionCode)
 	{
-	  if (status_info[i].code == (NTSTATUS) e->ExceptionCode)
-	    {
-	      exception_name = status_info[i].name;
-	      break;
-	    }
+	  exception_name = status_info[i].name;
+	  break;
 	}
     }
 
@@ -1288,7 +1285,7 @@ DWORD WINAPI
 dumpstack_overflow_wrapper (PVOID arg)
 {
   cygwin_exception *exc = (cygwin_exception *) arg;
-
+  SetThreadName (GetCurrentThreadId (), "__dumpstack_overflow");
   exc->dumpstack ();
   return 0;
 }

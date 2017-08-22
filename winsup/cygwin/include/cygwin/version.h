@@ -10,7 +10,7 @@ details. */
    the Cygwin shared library".  This version is used to track important
    changes to the DLL and is mainly informative in nature. */
 
-#define CYGWIN_VERSION_DLL_MAJOR 2006
+#define CYGWIN_VERSION_DLL_MAJOR 2009
 #define CYGWIN_VERSION_DLL_MINOR 0
 
 /* Major numbers before CYGWIN_VERSION_DLL_EPOCH are incompatible. */
@@ -466,12 +466,28 @@ details. */
   301: Export strtod_l, strtof_l, strtol_l, strtold_l, strtoll_l, strtoul_l,
        strtoull_l, wcstod_l, wcstof_l, wcstol_l, wcstold_l, wcstoll_l,
        wcstoul_l, wcstoull_l.
+  302: Export nl_langinfo_l.
+  303: Export pthread_getname_np, pthread_setname_np.
+  304: Export strerror_l, strptime_l, wcsftime_l.
+  305: [f]pathconf flag _PC_CASE_INSENSITIVE added.
+  306: Export getentropy, getrandom.
+  307: Export timingsafe_bcmp, timingsafe_memcmp.
+  308: Export dladdr.
+  309: Export getloadavg.
+  310: Export reallocarray.
+  311: Export __xpg_sigpause.
+  312: Export strverscmp, versionsort.
+  313: Export fls, flsl, flsll.
+  314: Export explicit_bzero.
+  315: Export pthread_mutex_timedlock.
+  316: Export pthread_rwlock_timedrdlock, pthread_rwlock_timedwrlock.
+  317: Export renameat2.
 
   Note that we forgot to bump the api for ualarm, strtoll, strtoull,
   sigaltstack, sethostname. */
 
 #define CYGWIN_VERSION_API_MAJOR 0
-#define CYGWIN_VERSION_API_MINOR 301
+#define CYGWIN_VERSION_API_MINOR 317
 
 /* There is also a compatibity version number associated with the shared memory
    regions.  It is incremented when incompatible changes are made to the shared

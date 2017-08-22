@@ -964,6 +964,7 @@ dll_crt0_1 (void *)
       if (cp > __progname && ascii_strcasematch (cp, ".exe"))
 	*cp = '\0';
     }
+  SetThreadName (GetCurrentThreadId (), program_invocation_short_name);
 
   (void) xdr_set_vprintf (&cygxdr_vwarnx);
   cygwin_finished_initializing = true;
@@ -1040,7 +1041,7 @@ _dll_crt0 ()
      under our own control and avoids collision with the OS. */
   if (!dynamically_loaded)
     {
-      if (!in_forkee || fork_info->from_main)
+      if (!in_forkee)
 	{
 	  /* Must be static since it's referenced after the stack and frame
 	     pointer registers have been changed. */

@@ -102,6 +102,7 @@ __wrap__ZdlPv NOSIGFE               # void operator delete(void *p) throw()
 __wrap__ZdlPvRKSt9nothrow_t NOSIGFE # void operator delete(void *p, const std::nothrow_t &nt) throw()
 __xdrrec_getrec SIGFE
 __xdrrec_setnonblock SIGFE
+__xpg_sigpause SIGFE
 __xpg_strerror_r SIGFE
 _exit SIGFE
 _feinitialise NOSIGFE
@@ -364,6 +365,7 @@ difftime NOSIGFE
 dirfd SIGFE
 dirname NOSIGFE
 div NOSIGFE
+dladdr SIGFE
 dlclose SIGFE
 dlerror NOSIGFE
 dlfork NOSIGFE
@@ -431,6 +433,7 @@ exp2f NOSIGFE
 exp2l NOSIGFE
 expf NOSIGFE
 expl NOSIGFE
+explicit_bzero NOSIGFE
 expm1 NOSIGFE
 expm1f NOSIGFE
 expm1l NOSIGFE
@@ -504,6 +507,9 @@ flockfile SIGFE
 floor NOSIGFE
 floorf NOSIGFE
 floorl NOSIGFE
+fls NOSIGFE
+flsl NOSIGFE
+flsll NOSIGFE
 fma NOSIGFE
 fmaf NOSIGFE
 fmal NOSIGFE
@@ -604,6 +610,7 @@ getdelim = __getdelim SIGFE
 getdomainname SIGFE
 getdtablesize NOSIGFE
 getegid NOSIGFE
+getentropy SIGFE
 getenv NOSIGFE
 geteuid NOSIGFE
 getgid NOSIGFE
@@ -622,6 +629,7 @@ gethostname = cygwin_gethostname SIGFE
 getifaddrs SIGFE
 getitimer SIGFE
 getline = __getline SIGFE
+getloadavg SIGFE
 getlogin NOSIGFE
 getlogin_r NOSIGFE
 getmntent SIGFE
@@ -650,6 +658,7 @@ getpwnam SIGFE
 getpwnam_r SIGFE
 getpwuid SIGFE
 getpwuid_r SIGFE
+getrandom SIGFE
 getrlimit SIGFE
 getrusage SIGFE
 gets SIGFE
@@ -939,6 +948,7 @@ nexttowardl NOSIGFE
 nftw SIGFE
 nice SIGFE
 nl_langinfo SIGFE
+nl_langinfo_l SIGFE
 nrand48 NOSIGFE
 ntohl NOSIGFE
 ntohs NOSIGFE
@@ -1045,6 +1055,7 @@ pthread_exit SIGFE
 pthread_getattr_np SIGFE
 pthread_getconcurrency SIGFE
 pthread_getcpuclockid SIGFE
+pthread_getname_np SIGFE
 pthread_getschedparam SIGFE
 pthread_getsequence_np SIGFE
 pthread_getspecific SIGFE
@@ -1057,6 +1068,7 @@ pthread_mutex_getprioceiling SIGFE
 pthread_mutex_init SIGFE
 pthread_mutex_lock SIGFE
 pthread_mutex_setprioceiling SIGFE
+pthread_mutex_timedlock SIGFE
 pthread_mutex_trylock SIGFE
 pthread_mutex_unlock SIGFE
 pthread_mutexattr_destroy SIGFE
@@ -1073,6 +1085,8 @@ pthread_once SIGFE
 pthread_rwlock_destroy SIGFE
 pthread_rwlock_init SIGFE
 pthread_rwlock_rdlock SIGFE
+pthread_rwlock_timedrdlock SIGFE
+pthread_rwlock_timedwrlock SIGFE
 pthread_rwlock_tryrdlock SIGFE
 pthread_rwlock_trywrlock SIGFE
 pthread_rwlock_unlock SIGFE
@@ -1085,6 +1099,7 @@ pthread_self SIGFE
 pthread_setcancelstate SIGFE
 pthread_setcanceltype SIGFE
 pthread_setconcurrency SIGFE
+pthread_setname_np SIGFE
 pthread_setschedparam SIGFE
 pthread_setschedprio SIGFE
 pthread_setspecific SIGFE
@@ -1132,6 +1147,7 @@ readlink SIGFE
 readlinkat SIGFE
 readv SIGFE
 realloc SIGFE
+reallocarray SIGFE
 reallocf SIGFE
 realpath SIGFE
 recv = cygwin_recv SIGFE
@@ -1152,6 +1168,7 @@ remquof NOSIGFE
 remquol NOSIGFE
 rename SIGFE
 renameat SIGFE
+renameat2 SIGFE
 res_close = __res_close SIGFE
 res_init = __res_init SIGFE
 res_mkquery = __res_mkquery SIGFE
@@ -1342,6 +1359,7 @@ strcpy NOSIGFE
 strcspn NOSIGFE
 strdup SIGFE
 strerror SIGFE
+strerror_l SIGFE
 strerror_r SIGFE
 strfmon SIGFE
 strfmon_l SIGFE
@@ -1360,6 +1378,7 @@ strndup SIGFE
 strnlen NOSIGFE
 strpbrk NOSIGFE
 strptime SIGFE
+strptime_l SIGFE
 strrchr NOSIGFE
 strsep NOSIGFE
 strsignal SIGFE
@@ -1385,6 +1404,7 @@ strtoull NOSIGFE
 strtoull_l NOSIGFE
 strtoumax = strtoull NOSIGFE
 strupr NOSIGFE
+strverscmp NOSIGFE
 strxfrm NOSIGFE
 strxfrm_l NOSIGFE
 swab NOSIGFE
@@ -1430,6 +1450,8 @@ timer_gettime SIGFE
 timer_settime SIGFE
 times SIGFE
 timezone SIGFE
+timingsafe_bcmp NOSIGFE
+timingsafe_memcmp NOSIGFE
 tmpfile SIGFE
 tmpnam SIGFE
 toascii NOSIGFE
@@ -1479,6 +1501,7 @@ vasprintf SIGFE
 vdprintf SIGFE
 verr SIGFE
 verrx SIGFE
+versionsort NOSIGFE
 vfiprintf SIGFE
 vfork SIGFE
 vfprintf SIGFE
@@ -1518,6 +1541,7 @@ wcscpy NOSIGFE
 wcscspn NOSIGFE
 wcsdup NOSIGFE
 wcsftime SIGFE
+wcsftime_l SIGFE
 wcslcat NOSIGFE
 wcslcpy NOSIGFE
 wcslen NOSIGFE

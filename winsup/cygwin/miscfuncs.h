@@ -9,10 +9,40 @@ details. */
 #ifndef _MISCFUNCS_H
 #define _MISCFUNCS_H
 
+#include <dinput.h>
+
 #define likely(X) __builtin_expect (!!(X), 1)
 #define unlikely(X) __builtin_expect (!!(X), 0)
 
-extern "C" int getentropy (void *ptr, size_t len);
+/* Check for Alt+Numpad keys in a console input record.  These are used to
+   enter codepoints not available in the current keyboard layout  For details
+   see http://www.fileformat.info/tip/microsoft/enter_unicode.htm */
+static inline bool
+is_alt_numpad_key (PINPUT_RECORD pirec)
+{
+  /* Remove lock key state from ControlKeyState.  Do not remove enhanced key
+     state since it helps to distinguish between cursor (EK) and numpad keys
+     (non-EK). */
+  DWORD ctrl_state = pirec->Event.KeyEvent.dwControlKeyState
+		     & ~(CAPSLOCK_ON | NUMLOCK_ON | SCROLLLOCK_ON);
+
+  return pirec->Event.KeyEvent.uChar.UnicodeChar == 0
+	 && ctrl_state == LEFT_ALT_PRESSED
+	 && pirec->Event.KeyEvent.wVirtualScanCode >= DIK_NUMPAD7
+	 && pirec->Event.KeyEvent.wVirtualScanCode <= DIK_NUMPAD0
+	 && pirec->Event.KeyEvent.wVirtualScanCode != DIK_SUBTRACT;
+}
+
+/* Event for left Alt, with a non-zero character, comes from Alt+Numpad
+   key sequence. e.g. <left-alt> 233 => &eacute;  This is typically handled
+   as the key up event after releasing the Alt key. */
+static inline bool
+is_alt_numpad_event (PINPUT_RECORD pirec)
+{
+  return pirec->Event.KeyEvent.uChar.UnicodeChar != 0
+	 && pirec->Event.KeyEvent.wVirtualKeyCode == VK_MENU
+	 && pirec->Event.KeyEvent.wVirtualScanCode == 0x38;
+}
 
 int __reg1 winprio_to_nice (DWORD);
 DWORD __reg1 nice_to_winprio (int &);
@@ -84,5 +114,7 @@ extern "C" HANDLE WINAPI CygwinCreateThread (LPTHREAD_START_ROUTINE thread_func,
 					     ULONG stacksize, ULONG guardsize,
 					     DWORD creation_flags,
 					     LPDWORD thread_id);
+
+void SetThreadName (DWORD dwThreadID, const char* threadName);
 
 #endif /*_MISCFUNCS_H*/

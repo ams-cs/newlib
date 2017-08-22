@@ -517,8 +517,6 @@ cygwin_getprotobynumber (int number)
 bool
 fdsock (cygheap_fdmanip& fd, const device *dev, SOCKET soc)
 {
-  int size;
-
   fd = build_fh_dev (*dev);
   if (!fd.isopen ())
     return false;
@@ -607,6 +605,13 @@ fdsock (cygheap_fdmanip& fd, const device *dev, SOCKET soc)
      Mbits/sec with a 65535 send buffer. We want this to be a multiple
      of 1k, but since 64k breaks WSADuplicateSocket we use 63Kb.
 
+     NOTE 4.  Tests with iperf uncover a problem in setting the SO_RCVBUF
+     and SO_SNDBUF sizes.  Windows is using autotuning since Windows Vista.
+     Manually setting SO_RCVBUF/SO_SNDBUF disables autotuning and leads to
+     inferior send/recv performance in scenarios with larger RTTs, as is
+     basically standard when accessing the internet.  For a discussion,
+     see https://cygwin.com/ml/cygwin-patches/2017-q1/msg00010.html.
+
      (*) Maximum normal TCP window size.  Coincidence?  */
 #ifdef __x86_64__
   ((fhandler_socket *) fd)->rmem () = 212992;
@@ -615,6 +620,9 @@ fdsock (cygheap_fdmanip& fd, const device *dev, SOCKET soc)
   ((fhandler_socket *) fd)->rmem () = 64512;
   ((fhandler_socket *) fd)->wmem () = 64512;
 #endif
+#if 0 /* See NOTE 4 above. */
+  int size;
+
   if (::setsockopt (soc, SOL_SOCKET, SO_RCVBUF,
 		    (char *) &((fhandler_socket *) fd)->rmem (), sizeof (int)))
     {
@@ -633,7 +641,7 @@ fdsock (cygheap_fdmanip& fd, const device *dev, SOCKET soc)
 			(size = sizeof (int), &size)))
 	system_printf ("getsockopt(SO_SNDBUF) failed, %u", WSAGetLastError ());
     }
-
+#endif
   /* A unique ID is necessary to recognize fhandler entries which are
      duplicated by dup(2) or fork(2).  This is used in BSD flock calls
      to identify the descriptor. */
@@ -923,6 +931,14 @@ cygwin_getsockopt (int fd, int level, int optname, void *optval,
 	{
 	  struct ucred *cred = (struct ucred *) optval;
 	  res = fh->getpeereid (&cred->pid, &cred->uid, &cred->gid);
+	  __leave;
+	}
+      else if (optname == SO_REUSEADDR && level == SOL_SOCKET)
+	{
+	  unsigned int *reuseaddr = (unsigned int *) optval;
+	  *reuseaddr = fh->saw_reuseaddr();
+	  *optlen = sizeof *reuseaddr;
+	  res = 0;
 	  __leave;
 	}
       /* Old applications still use the old WinSock1 IPPROTO_IP values. */
@@ -1819,6 +1835,7 @@ get_adapters_addresses (PIP_ADAPTER_ADDRESSES *pa_ret, ULONG family)
 	 The OS allocates stacks bottom up, so chances are good that the new
 	 stack will be located in the lower address area. */
       HANDLE thr = CreateThread (NULL, 0, call_gaa, &param, 0, NULL);
+      SetThreadName (GetThreadId (thr), "__call_gaa");
       if (!thr)
 	{
 	  debug_printf ("CreateThread: %E");

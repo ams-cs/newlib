@@ -60,6 +60,7 @@ details. */
 #include "tls_pbuf.h"
 #include "sync.h"
 #include "child_info.h"
+#include <cygwin/fs.h>  /* needed for RENAME_NOREPLACE */
 
 #undef _close
 #undef _lseek
@@ -373,7 +374,7 @@ try_to_bin (path_conv &pc, HANDLE &fh, ACCESS_MASK access, ULONG flags)
      names. */
   RtlAppendUnicodeToString (&recycler,
 			    (pc.fs_flags () & FILE_UNICODE_ON_DISK
-			     && !pc.fs_is_samba ())
+			     && !pc.fs_is_samba () && !pc.fs_is_netapp ())
 			    ? L".\xdc63\xdc79\xdc67" : L".cyg");
   pfii = (PFILE_INTERNAL_INFORMATION) infobuf;
   /* Note: Modern Samba versions apparently don't like buffer sizes of more
@@ -2048,14 +2049,19 @@ nt_path_has_executable_suffix (PUNICODE_STRING upath)
   return false;
 }
 
-extern "C" int
-rename (const char *oldpath, const char *newpath)
+/* If newpath names an existing file and the RENAME_NOREPLACE flag is
+   specified, fail with EEXIST.  Exception: Don't fail if the purpose
+   of the rename is just to change the case of oldpath on a
+   case-insensitive file system. */
+static int
+rename2 (const char *oldpath, const char *newpath, unsigned int flags)
 {
   tmp_pathbuf tp;
   int res = -1;
   path_conv oldpc, newpc, new2pc, *dstpc, *removepc = NULL;
   bool old_dir_requested = false, new_dir_requested = false;
   bool old_explicit_suffix = false, new_explicit_suffix = false;
+  bool noreplace = flags & RENAME_NOREPLACE;
   size_t olen, nlen;
   bool equal_path;
   NTSTATUS status = STATUS_SUCCESS;
@@ -2068,6 +2074,12 @@ rename (const char *oldpath, const char *newpath)
 
   __try
     {
+      if (flags & ~RENAME_NOREPLACE)
+	/* RENAME_NOREPLACE is the only flag currently supported. */
+	{
+	  set_errno (EINVAL);
+	  __leave;
+	}
       if (!*oldpath || !*newpath)
 	{
 	  /* Reject rename("","x"), rename("x","").  */
@@ -2224,7 +2236,7 @@ rename (const char *oldpath, const char *newpath)
 	  /* Check for newpath being identical or a subdir of oldpath. */
 	  if (RtlPrefixUnicodeString (oldpc.get_nt_native_path (),
 				      newpc.get_nt_native_path (),
-				      TRUE))
+				      oldpc.objcaseinsensitive ()))
 	    {
 	      if (newpc.get_nt_native_path ()->Length
 		  == oldpc.get_nt_native_path ()->Length)
@@ -2334,6 +2346,13 @@ rename (const char *oldpath, const char *newpath)
 	  || oldpc.fs_serial_number () != dstpc->fs_serial_number ())
 	{
 	  set_errno (EXDEV);
+	  __leave;
+	}
+
+      /* Should we replace an existing file? */
+      if ((removepc || dstpc->exists ()) && noreplace)
+	{
+	  set_errno (EEXIST);
 	  __leave;
 	}
 
@@ -2491,11 +2510,15 @@ rename (const char *oldpath, const char *newpath)
 	  __leave;
 	}
       pfri = (PFILE_RENAME_INFORMATION) tp.w_get ();
-      pfri->ReplaceIfExists = TRUE;
+      pfri->ReplaceIfExists = !noreplace;
       pfri->RootDirectory = NULL;
       pfri->FileNameLength = dstpc->get_nt_native_path ()->Length;
       memcpy (&pfri->FileName,  dstpc->get_nt_native_path ()->Buffer,
 	      pfri->FileNameLength);
+      /* If dstpc points to an existing file and RENAME_NOREPLACE has
+	 been specified, then we should get NT error
+	 STATUS_OBJECT_NAME_COLLISION ==> Win32 error
+	 ERROR_ALREADY_EXISTS ==> Cygwin error EEXIST. */
       status = NtSetInformationFile (fh, &io, pfri,
 				     sizeof *pfri + pfri->FileNameLength,
 				     FileRenameInformation);
@@ -2509,9 +2532,10 @@ rename (const char *oldpath, const char *newpath)
       if (status == STATUS_ACCESS_DENIED && dstpc->exists ()
 	  && !dstpc->isdir ())
 	{
+	  bool need_open = false;
+
 	  if ((dstpc->fs_flags () & FILE_SUPPORTS_TRANSACTIONS) && !trans)
 	    {
-	      start_transaction (old_trans, trans);
 	      /* As mentioned earlier, opening the file must be part of the
 		 transaction.  Therefore we have to reopen the file here if the
 		 transaction hasn't been started already.  Unfortunately we
@@ -2521,28 +2545,34 @@ rename (const char *oldpath, const char *newpath)
 		 re-open it.  Fortunately nothing has happened yet, so the
 		 atomicity of the rename functionality is not spoiled. */
 	      NtClose (fh);
-    retry_reopen:
-	      status = NtOpenFile (&fh, DELETE,
-				   oldpc.get_object_attr (attr, sec_none_nih),
-				   &io, FILE_SHARE_VALID_FLAGS,
-				   FILE_OPEN_FOR_BACKUP_INTENT
-				   | (oldpc.is_rep_symlink ()
-				      ? FILE_OPEN_REPARSE_POINT : 0));
-	      if (!NT_SUCCESS (status))
-		{
-		  if (NT_TRANSACTIONAL_ERROR (status) && trans)
-		    {
-		      /* If NtOpenFile fails due to transactional problems,
-			 stop transaction and go ahead without. */
-		      stop_transaction (status, old_trans, trans);
-		      debug_printf ("Transaction failure.  Retry open.");
-		      goto retry_reopen;
-		    }
-		  __seterrno_from_nt_status (status);
-		  __leave;
-		}
+	      start_transaction (old_trans, trans);
+	      need_open = true;
 	    }
-	  if (NT_SUCCESS (status = unlink_nt (*dstpc)))
+	  while (true)
+	    {
+	      status = STATUS_SUCCESS;
+	      if (need_open)
+		status = NtOpenFile (&fh, DELETE,
+				     oldpc.get_object_attr (attr, sec_none_nih),
+				     &io, FILE_SHARE_VALID_FLAGS,
+				     FILE_OPEN_FOR_BACKUP_INTENT
+				     | (oldpc.is_rep_symlink ()
+					? FILE_OPEN_REPARSE_POINT : 0));
+	      if (NT_SUCCESS (status))
+		{
+		  status = unlink_nt (*dstpc);
+		  if (NT_SUCCESS (status))
+		    break;
+		}
+	      if (!NT_TRANSACTIONAL_ERROR (status) || !trans)
+		break;
+	      /* If NtOpenFile or unlink_nt fail due to transactional problems,
+		 stop transaction and retry without. */
+	      NtClose (fh);
+	      stop_transaction (status, old_trans, trans);
+	      debug_printf ("Transaction failure %y.  Retry open.", status);
+	    }
+	  if (NT_SUCCESS (status))
 	    status = NtSetInformationFile (fh, &io, pfri,
 					   sizeof *pfri + pfri->FileNameLength,
 					   FileRenameInformation);
@@ -2569,6 +2599,12 @@ rename (const char *oldpath, const char *newpath)
   if (get_errno () != EFAULT)
     syscall_printf ("%R = rename(%s, %s)", res, oldpath, newpath);
   return res;
+}
+
+extern "C" int
+rename (const char *oldpath, const char *newpath)
+{
+  return rename2 (oldpath, newpath, 0);
 }
 
 extern "C" int
@@ -3777,28 +3813,6 @@ nice (int incr)
   return setpriority (PRIO_PROCESS, myself->pid, myself->nice + incr);
 }
 
-/*
- * Find the first bit set in I.
- */
-
-extern "C" int
-ffs (int i)
-{
-  return __builtin_ffs (i);
-}
-
-extern "C" int
-ffsl (long i)
-{
-  return __builtin_ffsl (i);
-}
-
-extern "C" int
-ffsll (long long i)
-{
-  return __builtin_ffsll (i);
-}
-
 static void
 locked_append (int fd, const void * buf, size_t size)
 {
@@ -4734,8 +4748,8 @@ readlinkat (int dirfd, const char *__restrict pathname, char *__restrict buf,
 }
 
 extern "C" int
-renameat (int olddirfd, const char *oldpathname,
-	  int newdirfd, const char *newpathname)
+renameat2 (int olddirfd, const char *oldpathname,
+	   int newdirfd, const char *newpathname, unsigned int flags)
 {
   tmp_pathbuf tp;
   __try
@@ -4746,11 +4760,18 @@ renameat (int olddirfd, const char *oldpathname,
       char *newpath = tp.c_get ();
       if (gen_full_path_at (newpath, newdirfd, newpathname))
 	__leave;
-      return rename (oldpath, newpath);
+      return rename2 (oldpath, newpath, flags);
     }
   __except (EFAULT) {}
   __endtry
   return -1;
+}
+
+extern "C" int
+renameat (int olddirfd, const char *oldpathname,
+	  int newdirfd, const char *newpathname)
+{
+  return renameat2 (olddirfd, oldpathname, newdirfd, newpathname, 0);
 }
 
 extern "C" int
@@ -4764,7 +4785,7 @@ scandirat (int dirfd, const char *pathname, struct dirent ***namelist,
       char *path = tp.c_get ();
       if (gen_full_path_at (path, dirfd, pathname))
 	__leave;
-      return scandir (pathname, namelist, select, compar);
+      return scandir (path, namelist, select, compar);
     }
   __except (EFAULT) {}
   __endtry

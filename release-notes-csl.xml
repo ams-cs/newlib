@@ -5,6 +5,20 @@
      relevant; it may be removed if it is relevant to all targets.
  -->
 
+      <!-- UUID: 288fe400-4c4c-407d-9aaa-85b971e10160 -->
+      <!-- TARGET: * -->
+      <!-- FEATURES: -->
+      <!-- COMPONENTS: newlib -->
+      <!-- SORT: newlib -->
+      <!-- ISSUE: ITS-177 -->
+      <formalpara>
+        <title>Newlib update</title>
+        <para>
+          The Newlib package has been updated to version 2.5.0,
+	  git revision 3012e251fa3e41dc12b636f2a1280973c587ad6b.
+        </para>
+      </formalpara>
+
       <!-- UUID: 7648ff7c-3411-4b5a-b635-7de816e2d879 -->
       <!-- TARGET: arm-none-eabi aarch64-none-elf powerpc-eabi mips-sde-elf arm-altera-eabi -->
       <!-- FEATURES: -->

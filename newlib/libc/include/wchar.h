@@ -69,7 +69,7 @@ typedef __gnuc_va_list va_list;
 #endif
 
 #if __POSIX_VISIBLE >= 200809
-#include <sys/_locale.h>
+#include <xlocale.h>
 #endif
 
 _BEGIN_STD_C
@@ -137,6 +137,10 @@ wchar_t	*_EXFUN(_wcsdup_r, (struct _reent *, const wchar_t * ));
 size_t	_EXFUN(wcscspn, (const wchar_t *, const wchar_t *));
 size_t  _EXFUN(wcsftime, (wchar_t *__restrict, size_t,
 				const wchar_t *__restrict, const struct tm *__restrict));
+#if __GNU_VISIBLE
+size_t  wcsftime_l (wchar_t *__restrict, size_t, const wchar_t *__restrict,
+		    const struct tm *__restrict, locale_t);
+#endif
 size_t	_EXFUN(wcslcat, (wchar_t *, const wchar_t *, size_t));
 size_t	_EXFUN(wcslcpy, (wchar_t *, const wchar_t *, size_t));
 size_t	_EXFUN(wcslen, (const wchar_t *));

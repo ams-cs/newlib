@@ -9,7 +9,7 @@
 
 #include "_ansi.h"
 #include <sys/cdefs.h>
-#include <sys/_locale.h>
+#include <xlocale.h>
 
   /* Indicate that we honor AEABI portability if requested.  */
 #if defined _AEABI_PORTABILITY_LEVEL && _AEABI_PORTABILITY_LEVEL != 0 && !defined _AEABI_PORTABLE
@@ -77,7 +77,7 @@ struct __aeabi_lconv {
 
 #if __POSIX_VISIBLE >= 200809 || defined (_COMPILING_NEWLIB)
 
-#include <sys/_locale.h>
+#include <xlocale.h>
 
 #define LC_ALL_MASK		(1 << LC_ALL)
 #define LC_COLLATE_MASK		(1 << LC_COLLATE)
@@ -124,12 +124,11 @@ struct _reent;
 char *_EXFUN(_setlocale_r,(struct _reent *, int, const char *));
 struct lconv *_EXFUN(_localeconv_r,(struct _reent *));
 
-#if __POSIX_VISIBLE >= 200809
-locale_t _newlocale_r (struct _reent *, int, const char *, locale_t);
-void _freelocale_r (struct _reent *, locale_t);
-locale_t _duplocale_r (struct _reent *, locale_t);
-locale_t _uselocale_r (struct _reent *, locale_t);
-#endif /* __POSIX_VISIBLE >= 200809 */
+struct __locale_t *_newlocale_r (struct _reent *, int, const char *,
+				 struct __locale_t *);
+void _freelocale_r (struct _reent *, struct __locale_t *);
+struct __locale_t *_duplocale_r (struct _reent *, struct __locale_t *);
+struct __locale_t *_uselocale_r (struct _reent *, struct __locale_t *);
 
 #ifndef _REENT_ONLY
 

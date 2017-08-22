@@ -17,7 +17,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 4. Neither the name of the University nor the names of its contributors
+ * 3. Neither the name of the University nor the names of its contributors
  *    may be used to endorse or promote products derived from this software
  *    without specific prior written permission.
  *
@@ -295,7 +295,8 @@
 #define	_Alignof(x)		__alignof(x)
 #endif
 
-#if !__has_extension(c_atomic) && !__has_extension(cxx_atomic)
+#if !defined(__cplusplus) && !__has_extension(c_atomic) && \
+    !__has_extension(cxx_atomic)
 /*
  * No native support for _Atomic(). Place object in structure to prevent
  * most forms of direct non-atomic access.
@@ -358,6 +359,21 @@
 #define	__generic(expr, t, yes, no)					\
 	__builtin_choose_expr(						\
 	    __builtin_types_compatible_p(__typeof(expr), t), yes, no)
+#endif
+
+/*
+ * C99 Static array indices in function parameter declarations.  Syntax such as:
+ * void bar(int myArray[static 10]);
+ * is allowed in C99 but not in C++.  Define __min_size appropriately so
+ * headers using it can be compiled in either language.  Use like this:
+ * void bar(int myArray[__min_size(10)]);
+ */
+#if !defined(__cplusplus) && \
+    (defined(__clang__) || __GNUC_PREREQ__(4, 6)) && \
+    (!defined(__STDC_VERSION__) || (__STDC_VERSION__ >= 199901))
+#define __min_size(x)	static (x)
+#else
+#define __min_size(x)	(x)
 #endif
 
 #if __GNUC_PREREQ__(2, 96)
@@ -464,11 +480,16 @@
 #endif
 
 #if __GNUC_PREREQ__(4, 0)
-#define	__sentinel	__attribute__((__sentinel__))
+#define	__null_sentinel	__attribute__((__sentinel__))
 #define	__exported	__attribute__((__visibility__("default")))
+/* Only default visibility is supported on PE/COFF targets. */
+#ifndef __CYGWIN__
 #define	__hidden	__attribute__((__visibility__("hidden")))
 #else
-#define	__sentinel
+#define	__hidden
+#endif
+#else
+#define	__null_sentinel
 #define	__exported
 #define	__hidden
 #endif
@@ -515,22 +536,6 @@
 	    __attribute__((__format__ (__strfmon__, fmtarg, firstvararg)))
 #define	__strftimelike(fmtarg, firstvararg) \
 	    __attribute__((__format__ (__strftime__, fmtarg, firstvararg)))
-#endif
-
-/*
- * FORTIFY_SOURCE, and perhaps other compiler-specific features, require
- * the use of non-standard inlining.  In general we should try to avoid
- * using these but GCC-compatible compilers tend to support the extensions
- * well enough to use them in limited cases.
- */ 
-#if defined(__GNUC_GNU_INLINE__) || defined(__GNUC_STDC_INLINE__)
-#if __GNUC_PREREQ__(4, 3) || __has_attribute(__artificial__)
-#define	__gnu_inline	__attribute__((__gnu_inline__, __artificial__))
-#else
-#define	__gnu_inline	__attribute__((__gnu_inline__))
-#endif /* artificial */
-#else
-#define	__gnu_inline
 #endif
 
 /* Compiler-dependent macros that rely on FreeBSD-specific extensions. */
@@ -625,6 +630,21 @@
 #endif
 
 /*
+ * Nullability qualifiers: currently only supported by Clang.
+ */
+#if !(defined(__clang__) && __has_feature(nullability))
+#define	_Nonnull
+#define	_Nullable
+#define	_Null_unspecified
+#define	__NULLABILITY_PRAGMA_PUSH
+#define	__NULLABILITY_PRAGMA_POP
+#else
+#define	__NULLABILITY_PRAGMA_PUSH _Pragma("clang diagnostic push")	\
+	_Pragma("clang diagnostic ignored \"-Wnullability-completeness\"")
+#define	__NULLABILITY_PRAGMA_POP _Pragma("clang diagnostic pop")
+#endif
+
+/*
  * Type Safety Checking
  *
  * Clang provides additional attributes to enable checking type safety
@@ -661,42 +681,42 @@
 #endif
 
 /* Structure implements a lock. */
-#define	__lockable		__lock_annotate(lockable)
+#define	__lockable		__lock_annotate(__lockable__)
 
 /* Function acquires an exclusive or shared lock. */
 #define	__locks_exclusive(...) \
-	__lock_annotate(exclusive_lock_function(__VA_ARGS__))
+	__lock_annotate(__exclusive_lock_function__(__VA_ARGS__))
 #define	__locks_shared(...) \
-	__lock_annotate(shared_lock_function(__VA_ARGS__))
+	__lock_annotate(__shared_lock_function__(__VA_ARGS__))
 
 /* Function attempts to acquire an exclusive or shared lock. */
 #define	__trylocks_exclusive(...) \
-	__lock_annotate(exclusive_trylock_function(__VA_ARGS__))
+	__lock_annotate(__exclusive_trylock_function__(__VA_ARGS__))
 #define	__trylocks_shared(...) \
-	__lock_annotate(shared_trylock_function(__VA_ARGS__))
+	__lock_annotate(__shared_trylock_function__(__VA_ARGS__))
 
 /* Function releases a lock. */
-#define	__unlocks(...)		__lock_annotate(unlock_function(__VA_ARGS__))
+#define	__unlocks(...)		__lock_annotate(__unlock_function__(__VA_ARGS__))
 
 /* Function asserts that an exclusive or shared lock is held. */
 #define	__asserts_exclusive(...) \
-	__lock_annotate(assert_exclusive_lock(__VA_ARGS__))
+	__lock_annotate(__assert_exclusive_lock__(__VA_ARGS__))
 #define	__asserts_shared(...) \
-	__lock_annotate(assert_shared_lock(__VA_ARGS__))
+	__lock_annotate(__assert_shared_lock__(__VA_ARGS__))
 
 /* Function requires that an exclusive or shared lock is or is not held. */
 #define	__requires_exclusive(...) \
-	__lock_annotate(exclusive_locks_required(__VA_ARGS__))
+	__lock_annotate(__exclusive_locks_required__(__VA_ARGS__))
 #define	__requires_shared(...) \
-	__lock_annotate(shared_locks_required(__VA_ARGS__))
+	__lock_annotate(__shared_locks_required__(__VA_ARGS__))
 #define	__requires_unlocked(...) \
-	__lock_annotate(locks_excluded(__VA_ARGS__))
+	__lock_annotate(__locks_excluded__(__VA_ARGS__))
 
 /* Function should not be analyzed. */
-#define	__no_lock_analysis	__lock_annotate(no_thread_safety_analysis)
+#define	__no_lock_analysis	__lock_annotate(__no_thread_safety_analysis__)
 
 /* Guard variables and structure members by lock. */
-#define	__guarded_by(x)		__lock_annotate(guarded_by(x))
-#define	__pt_guarded_by(x)	__lock_annotate(pt_guarded_by(x))
+#define	__guarded_by(x)		__lock_annotate(__guarded_by__(x))
+#define	__pt_guarded_by(x)	__lock_annotate(__pt_guarded_by__(x))
 
 #endif /* !_SYS_CDEFS_H_ */

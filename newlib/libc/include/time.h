@@ -40,7 +40,7 @@ extern _CONST int __aeabi_CLOCKS_PER_SEC;
 #include <sys/timespec.h>
 
 #if __POSIX_VISIBLE >= 200809
-#include <sys/_locale.h>
+#include <xlocale.h>
 #endif
 
 _BEGIN_STD_C
@@ -106,6 +106,11 @@ char      *_EXFUN(strptime,     (const char *__restrict,
 				 const char *__restrict,
 				 struct tm *__restrict));
 #endif
+#if __GNU_VISIBLE
+char *strptime_l (const char *__restrict, const char *__restrict,
+		  struct tm *__restrict, locale_t);
+#endif
+
 #if __POSIX_VISIBLE
 _VOID      _EXFUN(tzset,	(_VOID));
 #endif

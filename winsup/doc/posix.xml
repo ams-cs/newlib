@@ -595,6 +595,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     nftw
     nice
     nl_langinfo
+    nl_langinfo_l
     nrand48
     ntohl
     ntohs
@@ -705,6 +706,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     pthread_mutex_init
     pthread_mutex_lock
     pthread_mutex_setprioceiling
+    pthread_mutex_timedlock
     pthread_mutex_trylock
     pthread_mutex_unlock
     pthread_mutexattr_destroy
@@ -721,6 +723,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     pthread_rwlock_destroy
     pthread_rwlock_init
     pthread_rwlock_rdlock
+    pthread_rwlock_timedrdlock
+    pthread_rwlock_timedwrlock
     pthread_rwlock_tryrdlock
     pthread_rwlock_trywrlock
     pthread_rwlock_unlock
@@ -876,7 +880,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     signal
     signbit			(see chapter "Implementation Notes")
     signgam
-    sigpause
+    sigpause			(see chapter "Implementation Notes")
     sigpending
     sigprocmask
     sigqueue
@@ -923,7 +927,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     strcspn
     strdup
     strerror
-    strerror_r
+    strerror_l
+    strerror_r			(see chapter "Implementation Notes")
     strfmon
     strfmon_l
     strftime
@@ -1137,6 +1142,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     endusershell
     err
     errx
+    explicit_bzero
     feof_unlocked
     ferror_unlocked
     fflush_unlocked
@@ -1147,6 +1153,9 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     finitel
     fiprintf
     flock			(see chapter "Implementation Notes")
+    fls
+    flsl
+    flsll
     forkpty
     fpurge
     fputc_unlocked
@@ -1171,6 +1180,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     getdtablesize
     getgrouplist
     getifaddrs
+    getloadavg
     getpagesize
     getpeereid
     getprogname
@@ -1195,6 +1205,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     qsort_r			(see chapter "Implementation Notes")
     rcmd
     rcmd_af
+    reallocarray
     reallocf
     res_close
     res_init
@@ -1230,6 +1241,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     strlcat
     strlcpy
     strsep
+    timingsafe_bcmp
+    timingsafe_memcmp
     updwtmp
     valloc
     verr
@@ -1273,6 +1286,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     clog10
     clog10f
     clog10l
+    dladdr			(see chapter "Implementation Notes")
     dremf
     dup3
     envz_add
@@ -1336,10 +1350,13 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     pow10l
     ppoll
     pthread_getattr_np
+    pthread_getname_np
+    pthread_setname_np
     pthread_sigqueue
     ptsname_r
     putwc_unlocked
     putwchar_unlocked
+    renameat2			(see chapter "Implementation Notes")
     qsort_r			(see chapter "Implementation Notes")
     quotactl
     rawmemchr
@@ -1350,6 +1367,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     sincosf
     sincosl
     strchrnul
+    strptime_l
     strtod_l
     strtof_l
     strtol_l
@@ -1357,6 +1375,7 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     strtoll_l
     strtoul_l
     strtoull_l
+    strverscmp
     sysinfo
     tdestroy
     timegm
@@ -1367,6 +1386,8 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     vasnprintf
     vasprintf
     vasprintf_r
+    versionsort
+    wcsftime_l
     wcstod_l
     wcstof_l
     wcstol_l
@@ -1557,9 +1578,6 @@ also IEEE Std 1003.1-2008 (POSIX.1-2008).</para>
     pthread_mutexattr_getrobust
     pthread_mutexattr_setrobust
     pthread_mutex_consistent
-    pthread_mutex_timedlock
-    pthread_rwlock_timedrdlock
-    pthread_rwlock_timedwrlock
     putmsg
     setnetent
     sigtimedwait
@@ -1654,8 +1672,20 @@ group quotas, no inode quotas, no time constraints.</para>
 <para><function>qsort_r</function> is available in both BSD and GNU flavors,
 depending on whether _BSD_SOURCE or _GNU_SOURCE is defined when compiling.</para>
 
+<para>The Linux-specific function <function>renameat2</function> only
+supports the RENAME_NOREPLACE flag.</para>
+
 <para><function>basename</function> is available in both POSIX and GNU flavors,
 depending on whether libgen.h is included or not.</para>
+
+<para><function>sigpause</function> is available in both BSD and SysV/XSI
+flavors, depending on whether _XOPEN_SOURCE is defined when compiling.</para>
+
+<para><function>strerror_r</function> is available in both POSIX and GNU
+flavors, depending on whether _GNU_SOURCE is defined when compiling.</para>
+
+<para><function>dladdr</function> always sets the Dl_info members dli_sname and
+dli_saddr to NULL, indicating no symbol matching addr could be found.</para>
 
 </sect1>
 

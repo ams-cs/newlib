@@ -475,8 +475,8 @@ extern const struct __sFILE_fake __sf_fake_stderr;
     (var)->_stderr = (__FILE *)&__sf_fake_stderr; \
   }
 
-/* Only built the assert() calls if we are built with debugging.  */
-#if DEBUG
+/* Only add assert() calls if we are specified to debug.  */
+#ifdef _REENT_CHECK_DEBUG
 #include <assert.h>
 #define __reent_assert(x) assert(x)
 #else
@@ -665,14 +665,23 @@ struct _reent
      of the above members (on the off chance that future binary compatibility
      would be broken otherwise).  */
   struct _glue __sglue;		/* root of glue chain */
+# ifndef _REENT_GLOBAL_STDIO_STREAMS
   __FILE __sf[3];  		/* first three file descriptors */
+# endif
 };
+
+#ifdef _REENT_GLOBAL_STDIO_STREAMS
+extern __FILE __sf[3];
+#define _REENT_STDIO_STREAM(var, index) &__sf[index]
+#else
+#define _REENT_STDIO_STREAM(var, index) &(var)->__sf[index]
+#endif
 
 #define _REENT_INIT(var) \
   { 0, \
-    &(var).__sf[0], \
-    &(var).__sf[1], \
-    &(var).__sf[2], \
+    _REENT_STDIO_STREAM(&(var), 0), \
+    _REENT_STDIO_STREAM(&(var), 1), \
+    _REENT_STDIO_STREAM(&(var), 2), \
     0, \
     "", \
     0, \
@@ -717,9 +726,9 @@ struct _reent
   }
 
 #define _REENT_INIT_PTR_ZEROED(var) \
-  { (var)->_stdin = &(var)->__sf[0]; \
-    (var)->_stdout = &(var)->__sf[1]; \
-    (var)->_stderr = &(var)->__sf[2]; \
+  { (var)->_stdin = _REENT_STDIO_STREAM(var, 0); \
+    (var)->_stdout = _REENT_STDIO_STREAM(var, 1); \
+    (var)->_stderr = _REENT_STDIO_STREAM(var, 2); \
     (var)->_new._reent._rand_next = 1; \
     (var)->_new._reent._r48._seed[0] = _RAND48_SEED_0; \
     (var)->_new._reent._r48._seed[1] = _RAND48_SEED_1; \

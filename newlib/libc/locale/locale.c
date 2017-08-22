@@ -498,7 +498,11 @@ __loadlocale (struct __locale_t *loc, int category, const char *new_locale)
   mbtowc_p l_mbtowc;
   int cjknarrow = 0;
 
-  /* Avoid doing everything twice if nothing has changed. */
+  /* Avoid doing everything twice if nothing has changed.
+
+     duplocale relies on this test to go wrong so the locale is actually
+     duplicated when required.  Any change here has to be synced with a
+     matching change in duplocale. */
   if (!strcmp (new_locale, loc->categories[category]))
     return loc->categories[category];
 
@@ -996,7 +1000,7 @@ __locale_ctype_ptr_l (struct __locale_t *locale)
 const char *
 __locale_ctype_ptr (void)
 {
-  return __get_current_locale (_REENT)->ctype_ptr;
+  return __get_current_locale ()->ctype_ptr;
 }
 
 #ifndef _REENT_ONLY

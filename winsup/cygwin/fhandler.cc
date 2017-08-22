@@ -111,26 +111,6 @@ fhandler_base::set_readahead_valid (int val, int ch)
 }
 
 int
-fhandler_base::eat_readahead (int n)
-{
-  int oralen = ralen;
-  if (n < 0)
-    n = ralen;
-  if (n > 0 && ralen)
-    {
-      if ((int) (ralen -= n) < 0)
-	ralen = 0;
-
-      if (raixget >= ralen)
-	raixget = raixput = ralen = 0;
-      else if (raixput > ralen)
-	raixput = ralen;
-    }
-
-  return oralen;
-}
-
-int
 fhandler_base::get_readahead_into_buffer (char *buf, size_t buflen)
 {
   int ch;
@@ -833,7 +813,7 @@ out:
 ssize_t __stdcall
 fhandler_base::write (const void *ptr, size_t len)
 {
-  int res;
+  ssize_t res;
 
   if (did_lseek ())
     {
@@ -1549,6 +1529,15 @@ fhandler_dev_null::fhandler_dev_null () :
 {
 }
 
+ssize_t __stdcall
+fhandler_dev_null::write (const void *ptr, size_t len)
+{
+  /* Shortcut.  This also fixes a problem with the NUL device on 64 bit:
+     If you write > 4 GB in a single attempt, the bytes written returned
+     from by is numBytes & 0xffffffff. */
+  return len;
+}
+
 void
 fhandler_base::set_no_inheritance (HANDLE &h, bool not_inheriting)
 {
@@ -1891,6 +1880,8 @@ fhandler_base::fpathconf (int v)
 	return pc.has_acls () || pc.fs_is_nfs ();
       set_errno (EINVAL);
       break;
+    case _PC_CASE_INSENSITIVE:
+      return !!pc.objcaseinsensitive ();
     default:
       set_errno (EINVAL);
       break;
@@ -2153,7 +2144,7 @@ fhandler_base_overlapped::raw_write (const void *ptr, size_t len)
 	    case overlapped_success:
 	      ptr = ((char *) ptr) + chunk;
 	      nbytes += nbytes_now;
-	      /* fall through intentionally */
+	      break;
 	    case overlapped_error:
 	      len = 0;		/* terminate loop */
 	    case overlapped_unknown:

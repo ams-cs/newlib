@@ -293,9 +293,8 @@ def synopsis(c, t):
 
     s = ''
     for l in t.splitlines():
-	if re.match('\s*[#[]', l):
-	    # a #include, #define etc.
-	    # fpclassify contains some comments in [ ] brackets
+	if re.match('\s*(#|\[|struct)', l):
+	    # preprocessor # directives, structs, comments in square brackets
 	    funcsynopsisinfo = lxml.etree.SubElement(funcsynopsis, 'funcsynopsisinfo')
 	    funcsynopsisinfo.text = l.strip() + '\n'
 	else:
@@ -468,6 +467,8 @@ def line_markup_convert(p):
     # also convert some simple texinfo markup
     # convert @emph{foo} to <emphasis>foo</emphasis>
     s = re.sub('@emph{(.*?)}', '<emphasis>\\1</emphasis>', s)
+    # convert @strong{foo} to <emphasis role=strong>foo</emphasis>
+    s = re.sub('@strong{(.*?)}', '<emphasis role="strong">\\1</emphasis>', s)
     # convert @minus{} to U+2212 MINUS SIGN
     s = s.replace('@minus{}', '&#x2212;')
     # convert @dots{} to U+2026 HORIZONTAL ELLIPSIS
@@ -824,7 +825,11 @@ def main(file):
 if __name__ == '__main__' :
     options = OptionParser()
     options.add_option('-v', '--verbose', action='count', dest = 'verbose')
+    options.add_option('-c', '--cache', action='store_true', dest = 'cache', help="just ensure PLY cache is up to date")
     (opts, args) = options.parse_args()
+
+    if opts.cache:
+	sys.exit()
 
     verbose = opts.verbose
 

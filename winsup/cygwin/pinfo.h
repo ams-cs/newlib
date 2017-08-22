@@ -26,7 +26,8 @@ enum picom
   PICOM_ROOT = 3,
   PICOM_FDS = 4,
   PICOM_FD = 5,
-  PICOM_PIPE_FHANDLER = 6
+  PICOM_PIPE_FHANDLER = 6,
+  PICOM_ENVIRON = 7
 };
 
 #define EXITCODE_SET		0x8000000
@@ -106,6 +107,7 @@ public:
   char *root (size_t &);
   char *cwd (size_t &);
   char *cmdline (size_t &);
+  char *environ (size_t &);
   char *win_heap_info (size_t &);
   bool set_ctty (class fhandler_termios *, int);
   bool alert_parent (char);
@@ -224,8 +226,6 @@ public:
   inline void reset () { release (); npids = 0;}
   void set (bool winpid);
   winpids (): make_copy (true) {}
-  winpids (int): make_copy (false), npidlist (0), pidlist (NULL),
-		 pinfolist (NULL), pinfo_access (0), npids (0) {}
   winpids (DWORD acc): make_copy (false), npidlist (0), pidlist (NULL),
 		       pinfolist (NULL), pinfo_access (acc), npids (0)
   {

@@ -15,11 +15,17 @@
 
 #include <stdlib.h>
 
-void gomp_print_string (const char *msg, const char *str);
-
 void __attribute__((noreturn))
-abort (void)
+exit (int val)
 {
-  gomp_print_string ("GCN Kernel Aborted", "");
-  exit (1);
+  /* Write the exit value to the conventional place.  */
+  int *return_value;
+  asm ("s_load_dwordx2	%0, s[8:9], 16 glc\n\t"
+       "s_waitcnt	0" : "=Sg"(return_value));
+  *return_value = val;
+
+  /* Terminate the current kernel.  */
+  asm ("s_dcache_wb");
+  asm ("s_endpgm");
+  __builtin_unreachable();
 }

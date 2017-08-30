@@ -8,7 +8,8 @@ AM_CCASFLAGS = $(INCLUDES)
 
 noinst_LIBRARIES = lib.a
 
-lib_a_SOURCES = abort.c exit.c
+lib_a_SOURCES = calloc.c callocr.c free.c realloc.c reallocr.c \
+		malloc.c mallocr.c abort.c exit.c
 lib_a_CFLAGS = $(AM_CFLAGS)
 
 ACLOCAL_AMFLAGS = -I ../../.. -I ../../../..

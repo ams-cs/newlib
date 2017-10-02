@@ -1576,8 +1576,13 @@ typedef struct malloc_chunk* mbinptr;
    indexing, maintain locality, and avoid some initialization tests.
 */
 
+#ifdef WORKAROUND_ABSOLUTE_INITIALIZERS
+static int ____one = 1;
+#else
+#define ____one 1
+#endif
 #define top            (bin_at(0)->fd)   /* The topmost chunk */
-#define last_remainder (bin_at(1))       /* remainder from last split */
+#define last_remainder (bin_at(____one))       /* remainder from last split */
 
 
 /*
@@ -1594,7 +1599,9 @@ typedef struct malloc_chunk* mbinptr;
 #define IAV(i)  bin_at(i), bin_at(i)
 
 #ifdef DEFINE_MALLOC
-STATIC mbinptr av_[NAV * 2 + 2] = {
+STATIC mbinptr av_[NAV * 2 + 2]
+#ifndef WORKAROUND_ABSOLUTE_INITIALIZERS
+= {
  0, 0,
  IAV(0),   IAV(1),   IAV(2),   IAV(3),   IAV(4),   IAV(5),   IAV(6),   IAV(7),
  IAV(8),   IAV(9),   IAV(10),  IAV(11),  IAV(12),  IAV(13),  IAV(14),  IAV(15),
@@ -1613,6 +1620,19 @@ STATIC mbinptr av_[NAV * 2 + 2] = {
  IAV(112), IAV(113), IAV(114), IAV(115), IAV(116), IAV(117), IAV(118), IAV(119),
  IAV(120), IAV(121), IAV(122), IAV(123), IAV(124), IAV(125), IAV(126), IAV(127)
 };
+#else
+;
+STATIC void
+init_av(void)
+{
+  av_[0] = 0;
+  av_[1] = 0;
+  int i;
+  for (i = 0; i < 128; i++)
+    av_[i*2 + 2] = av_[i*2 + 3] = bin_at(i);
+}
+#endif
+
 #else
 extern mbinptr av_[NAV * 2 + 2];
 #endif
@@ -2331,6 +2351,15 @@ Void_t* mALLOc(RARG bytes) RDECL size_t bytes;
   return malloc (bytes); // Make sure that the pointer returned by malloc is returned back.
 
 #else
+#ifdef WORKAROUND_ABSOLUTE_INITIALIZERS
+  static int initialized = 0;
+  if (!initialized)
+    {
+      init_av ();
+      initialized = 1;
+    }
+#endif
+
 
   mchunkptr victim;                  /* inspected/selected chunk */
   INTERNAL_SIZE_T victim_size;       /* its size */

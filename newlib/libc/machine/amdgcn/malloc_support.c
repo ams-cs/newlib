@@ -65,7 +65,10 @@ sbrk (ptrdiff_t nbytes)
 void
 __malloc_lock (struct _reent *reent)
 {
-  __sync_lock_test_and_set (&__heap_lock, 1);
+  while (__sync_lock_test_and_set (&__heap_lock, 1))
+    /* A sleep seems like it should allow the wavefront to yeild (maybe?)
+       Use the shortest possible sleep time of 1*64 cycles.  */
+    asm volatile ("s_sleep\t1" ::: "memory");
 }
 
 void

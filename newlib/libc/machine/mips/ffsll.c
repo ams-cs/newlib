@@ -33,7 +33,7 @@
 
 /* ffsll.c : stdlib function.  */
 
-#include <strings.h>
+extern int ffs (int);
 
 #define CNTBITS(shift)			\
     do {				\

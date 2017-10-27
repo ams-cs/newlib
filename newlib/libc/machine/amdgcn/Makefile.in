@@ -73,7 +73,7 @@ am_lib_a_OBJECTS = lib_a-abort.$(OBJEXT) lib_a-exit.$(OBJEXT) \
 	lib_a-write.$(OBJEXT) lib_a-malloc_support.$(OBJEXT) \
 	lib_a-read.$(OBJEXT) lib_a-fstat.$(OBJEXT) \
 	lib_a-isatty.$(OBJEXT) lib_a-lseek.$(OBJEXT) \
-	lib_a-close.$(OBJEXT)
+	lib_a-close.$(OBJEXT) lib_a-getreent.$(OBJEXT)
 lib_a_OBJECTS = $(am_lib_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -198,7 +198,7 @@ INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 AM_CCASFLAGS = $(INCLUDES)
 noinst_LIBRARIES = lib.a
 lib_a_SOURCES = abort.c exit.c write.c malloc_support.c \
-		read.c fstat.c isatty.c lseek.c close.c
+		read.c fstat.c isatty.c lseek.c close.c getreent.c
 
 lib_a_CFLAGS = $(AM_CFLAGS)
 ACLOCAL_AMFLAGS = -I ../../.. -I ../../../..
@@ -314,6 +314,12 @@ lib_a-close.o: close.c
 
 lib_a-close.obj: close.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-close.obj `if test -f 'close.c'; then $(CYGPATH_W) 'close.c'; else $(CYGPATH_W) '$(srcdir)/close.c'; fi`
+
+lib_a-getreent.o: getreent.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-getreent.o `test -f 'getreent.c' || echo '$(srcdir)/'`getreent.c
+
+lib_a-getreent.obj: getreent.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-getreent.obj `if test -f 'getreent.c'; then $(CYGPATH_W) 'getreent.c'; else $(CYGPATH_W) '$(srcdir)/getreent.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

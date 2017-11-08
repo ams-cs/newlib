@@ -1,6 +1,6 @@
 /*
  * Support file for amdgcn in newlib.
- * Copyright (c) 2015, 2017 Mentor Graphics.
+ * Copyright (c) 2017 Mentor Graphics.
  *
  * The authors hereby grant permission to use, copy, modify, distribute,
  * and license this software and its documentation for any purpose, provided
@@ -13,12 +13,11 @@
  * they apply.
  */
 
-#include <stdarg.h>
-#include <string.h>
+#include <unistd.h>
+#include <errno.h>
 
-int
-puts (const char *str)
+int isatty(int fd)
 {
-  write (0, str, strlen (str));
-  putchar ('\n');
+  errno = EINVAL;
+  return 0;
 }

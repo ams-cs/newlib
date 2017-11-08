@@ -70,9 +70,10 @@ ARFLAGS = cru
 lib_a_AR = $(AR) $(ARFLAGS)
 lib_a_LIBADD =
 am_lib_a_OBJECTS = lib_a-abort.$(OBJEXT) lib_a-exit.$(OBJEXT) \
-	lib_a-putchar.$(OBJEXT) lib_a-puts.$(OBJEXT) \
-	lib_a-write.$(OBJEXT) lib_a-vprintf.$(OBJEXT) \
-	lib_a-printf.$(OBJEXT) lib_a-malloc_support.$(OBJEXT)
+	lib_a-write.$(OBJEXT) lib_a-malloc_support.$(OBJEXT) \
+	lib_a-read.$(OBJEXT) lib_a-fstat.$(OBJEXT) \
+	lib_a-isatty.$(OBJEXT) lib_a-lseek.$(OBJEXT) \
+	lib_a-close.$(OBJEXT)
 lib_a_OBJECTS = $(am_lib_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -196,8 +197,8 @@ AUTOMAKE_OPTIONS = cygnus
 INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 AM_CCASFLAGS = $(INCLUDES)
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = abort.c exit.c putchar.c puts.c write.c \
-		vprintf.c printf.c malloc_support.c
+lib_a_SOURCES = abort.c exit.c write.c malloc_support.c \
+		read.c fstat.c isatty.c lseek.c close.c
 
 lib_a_CFLAGS = $(AM_CFLAGS)
 ACLOCAL_AMFLAGS = -I ../../.. -I ../../../..
@@ -272,41 +273,47 @@ lib_a-exit.o: exit.c
 lib_a-exit.obj: exit.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-exit.obj `if test -f 'exit.c'; then $(CYGPATH_W) 'exit.c'; else $(CYGPATH_W) '$(srcdir)/exit.c'; fi`
 
-lib_a-putchar.o: putchar.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-putchar.o `test -f 'putchar.c' || echo '$(srcdir)/'`putchar.c
-
-lib_a-putchar.obj: putchar.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-putchar.obj `if test -f 'putchar.c'; then $(CYGPATH_W) 'putchar.c'; else $(CYGPATH_W) '$(srcdir)/putchar.c'; fi`
-
-lib_a-puts.o: puts.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-puts.o `test -f 'puts.c' || echo '$(srcdir)/'`puts.c
-
-lib_a-puts.obj: puts.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-puts.obj `if test -f 'puts.c'; then $(CYGPATH_W) 'puts.c'; else $(CYGPATH_W) '$(srcdir)/puts.c'; fi`
-
 lib_a-write.o: write.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-write.o `test -f 'write.c' || echo '$(srcdir)/'`write.c
 
 lib_a-write.obj: write.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-write.obj `if test -f 'write.c'; then $(CYGPATH_W) 'write.c'; else $(CYGPATH_W) '$(srcdir)/write.c'; fi`
 
-lib_a-vprintf.o: vprintf.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-vprintf.o `test -f 'vprintf.c' || echo '$(srcdir)/'`vprintf.c
-
-lib_a-vprintf.obj: vprintf.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-vprintf.obj `if test -f 'vprintf.c'; then $(CYGPATH_W) 'vprintf.c'; else $(CYGPATH_W) '$(srcdir)/vprintf.c'; fi`
-
-lib_a-printf.o: printf.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-printf.o `test -f 'printf.c' || echo '$(srcdir)/'`printf.c
-
-lib_a-printf.obj: printf.c
-	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-printf.obj `if test -f 'printf.c'; then $(CYGPATH_W) 'printf.c'; else $(CYGPATH_W) '$(srcdir)/printf.c'; fi`
-
 lib_a-malloc_support.o: malloc_support.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-malloc_support.o `test -f 'malloc_support.c' || echo '$(srcdir)/'`malloc_support.c
 
 lib_a-malloc_support.obj: malloc_support.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-malloc_support.obj `if test -f 'malloc_support.c'; then $(CYGPATH_W) 'malloc_support.c'; else $(CYGPATH_W) '$(srcdir)/malloc_support.c'; fi`
+
+lib_a-read.o: read.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-read.o `test -f 'read.c' || echo '$(srcdir)/'`read.c
+
+lib_a-read.obj: read.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-read.obj `if test -f 'read.c'; then $(CYGPATH_W) 'read.c'; else $(CYGPATH_W) '$(srcdir)/read.c'; fi`
+
+lib_a-fstat.o: fstat.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-fstat.o `test -f 'fstat.c' || echo '$(srcdir)/'`fstat.c
+
+lib_a-fstat.obj: fstat.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-fstat.obj `if test -f 'fstat.c'; then $(CYGPATH_W) 'fstat.c'; else $(CYGPATH_W) '$(srcdir)/fstat.c'; fi`
+
+lib_a-isatty.o: isatty.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-isatty.o `test -f 'isatty.c' || echo '$(srcdir)/'`isatty.c
+
+lib_a-isatty.obj: isatty.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-isatty.obj `if test -f 'isatty.c'; then $(CYGPATH_W) 'isatty.c'; else $(CYGPATH_W) '$(srcdir)/isatty.c'; fi`
+
+lib_a-lseek.o: lseek.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lseek.o `test -f 'lseek.c' || echo '$(srcdir)/'`lseek.c
+
+lib_a-lseek.obj: lseek.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-lseek.obj `if test -f 'lseek.c'; then $(CYGPATH_W) 'lseek.c'; else $(CYGPATH_W) '$(srcdir)/lseek.c'; fi`
+
+lib_a-close.o: close.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-close.o `test -f 'close.c' || echo '$(srcdir)/'`close.c
+
+lib_a-close.obj: close.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-close.obj `if test -f 'close.c'; then $(CYGPATH_W) 'close.c'; else $(CYGPATH_W) '$(srcdir)/close.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

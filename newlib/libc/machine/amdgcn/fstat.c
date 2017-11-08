@@ -13,13 +13,11 @@
  * they apply.
  */
 
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdlib.h>
+#include <unistd.h>
+#include <errno.h>
 
-int
-vprintf (const char *fmt, va_list ap)
+int fstat(int fildes, struct stat *buf)
 {
-  abort ();
-  return 0;
+  errno = EIO;
+  return -1;
 }

@@ -14,11 +14,8 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 
-int
-printf (const char *fmt, ...)
+_READ_WRITE_RETURN_TYPE read (int fildes, void *buf, size_t nbyte)
 {
-  abort ();
   return 0;
 }

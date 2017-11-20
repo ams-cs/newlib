@@ -14,6 +14,8 @@
  */
 
 #include <stdlib.h>
+#include <signal.h>
+#include "exit-value.h"
 
 void gomp_print_string (const char *msg, const char *str);
 
@@ -21,5 +23,5 @@ void __attribute__((noreturn))
 abort (void)
 {
   gomp_print_string ("GCN Kernel Aborted", "");
-  exit (1);
+  exit_with_status_and_signal (0, SIGABRT);
 }

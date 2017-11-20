@@ -14,18 +14,10 @@
  */
 
 #include <stdlib.h>
+#include "exit-value.h"
 
 void __attribute__((noreturn))
 exit (int val)
 {
-  /* Write the exit value to the conventional place.  */
-  int *return_value;
-  asm ("s_load_dwordx2	%0, s[8:9], 16 glc\n\t"
-       "s_waitcnt	0" : "=Sg"(return_value));
-  *return_value = val;
-
-  /* Terminate the current kernel.  */
-  asm ("s_dcache_wb");
-  asm ("s_endpgm");
-  __builtin_unreachable();
+  exit_with_status_and_signal (val, 0);
 }

@@ -31,6 +31,8 @@ struct heap {
 static char *__heap_ptr = (char*)-1;
 static char *__heap_end = (char*)-1;
 static int __heap_lock = 0;
+static void *__heap_lock_id = NULL;
+static int __heap_lock_cnt = 0;
 
 void *
 sbrk (ptrdiff_t nbytes)
@@ -65,14 +67,45 @@ sbrk (ptrdiff_t nbytes)
 void
 __malloc_lock (struct _reent *reent)
 {
+  void *id = reent;
+
+  if (id == __heap_lock_id)
+    {
+      if (__heap_lock_cnt < 1)
+	abort ();
+      ++__heap_lock_cnt;
+      return;
+    }
+
   while (__sync_lock_test_and_set (&__heap_lock, 1))
     /* A sleep seems like it should allow the wavefront to yeild (maybe?)
        Use the shortest possible sleep time of 1*64 cycles.  */
     asm volatile ("s_sleep\t1" ::: "memory");
+
+  if (__heap_lock_id != NULL)
+    abort ();
+  if (__heap_lock_cnt != 0)
+    abort ();
+
+  __heap_lock_cnt = 1;
+  __heap_lock_id = id;
 }
 
 void
 __malloc_unlock (struct _reent *reent)
 {
+  void *id = reent;
+
+  if (id != __heap_lock_id)
+    abort ();
+  if (__heap_lock_cnt < 1)
+    abort ();
+
+  --__heap_lock_cnt;
+
+  if (__heap_lock_cnt > 0)
+    return;
+
+  __heap_lock_id = NULL;
   __sync_lock_release (&__heap_lock);
 }

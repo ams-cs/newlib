@@ -73,7 +73,8 @@ am_lib_a_OBJECTS = lib_a-abort.$(OBJEXT) lib_a-exit.$(OBJEXT) \
 	lib_a-write.$(OBJEXT) lib_a-malloc_support.$(OBJEXT) \
 	lib_a-read.$(OBJEXT) lib_a-fstat.$(OBJEXT) \
 	lib_a-isatty.$(OBJEXT) lib_a-lseek.$(OBJEXT) \
-	lib_a-close.$(OBJEXT) lib_a-getreent.$(OBJEXT)
+	lib_a-close.$(OBJEXT) lib_a-getreent.$(OBJEXT) \
+	lib_a-atexit.$(OBJEXT)
 lib_a_OBJECTS = $(am_lib_a_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp =
@@ -197,7 +198,7 @@ AUTOMAKE_OPTIONS = cygnus
 INCLUDES = $(NEWLIB_CFLAGS) $(CROSS_CFLAGS) $(TARGET_CFLAGS)
 AM_CCASFLAGS = $(INCLUDES)
 noinst_LIBRARIES = lib.a
-lib_a_SOURCES = abort.c exit.c write.c malloc_support.c \
+lib_a_SOURCES = abort.c exit.c atexit.c write.c malloc_support.c \
 		read.c fstat.c isatty.c lseek.c close.c getreent.c
 
 lib_a_CFLAGS = $(AM_CFLAGS)
@@ -320,6 +321,12 @@ lib_a-getreent.o: getreent.c
 
 lib_a-getreent.obj: getreent.c
 	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-getreent.obj `if test -f 'getreent.c'; then $(CYGPATH_W) 'getreent.c'; else $(CYGPATH_W) '$(srcdir)/getreent.c'; fi`
+
+lib_a-atexit.o: atexit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-atexit.o `test -f 'atexit.c' || echo '$(srcdir)/'`atexit.c
+
+lib_a-atexit.obj: atexit.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(lib_a_CFLAGS) $(CFLAGS) -c -o lib_a-atexit.obj `if test -f 'atexit.c'; then $(CYGPATH_W) 'atexit.c'; else $(CYGPATH_W) '$(srcdir)/atexit.c'; fi`
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \

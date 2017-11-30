@@ -2,6 +2,9 @@
 
 #include <reent.h>
 #include <stdint.h>
+#include <stdlib.h>
+
+void gomp_print_string (const char *msg, const char *val);
 
 /* Copied from the HSA documentation.  */
 typedef struct hsa_signal_s {
@@ -30,18 +33,13 @@ __getreent (void)
   /* Place the reent data at the top of the stack allocation.
      s[0:1] contains a 48-bit private segment base address.
      s11 contains the offset to the base of the stack.
-     s[4:5] contains the dispatch pointer.  */
-  long private_segment;
-  int stack_offset;
-  hsa_kernel_dispatch_packet_t *dispatch_ptr;
-
-  asm("s_mov_b32 %L0, s0\n\t"
-      "s_and_b32 %H0, s1, 0xffff"
-      : "=Sg"(private_segment));
-  asm("s_mov_b32 %0, s11"
-      : "=Sg"(stack_offset));
-  asm("s_mov_b64 %0, s[4:5]"
-      : "=Sg"(dispatch_ptr));
+     s[4:5] contains the dispatch pointer.
+     
+     WARNING: this code will break if s[0:3] is ever used for anything!  */
+  const register long buffer_descriptor asm("s0");
+  long private_segment = buffer_descriptor & 0x0000ffffffffffff;
+  const register int stack_offset asm("s11");
+  const register hsa_kernel_dispatch_packet_t *dispatch_ptr asm("s4");
 
   struct data {
     int marker;
@@ -53,13 +51,32 @@ __getreent (void)
   long addr = (stack_end - sizeof(struct data)) & ~7;
   data = (struct data *)addr;
 
-  if (data->marker != (int)(long)dispatch_ptr)
+  register long sp asm("s16");
+  if (sp >= addr)
+    goto stackoverflow;
+
+  /* Place a marker in s3 to indicate that the reent data is initialized.
+     The register is known to hold part of an unused buffer descriptor
+     when the kernel is launched.  This may not be unused forever, but
+     we already used s0 and s1 above, so this doesn't do extra harm.  */
+  register int s3 asm("s3");
+  if (s3 != 123456)
     {
-      data->marker = (int)(long)dispatch_ptr;
+      asm("s_mov_b32 s3, 123456");
+      data->marker = 123456;
+
       __builtin_memset (&data->reent, 0, sizeof(struct _reent));
       _REENT_INIT_PTR_ZEROED (&data->reent);
     }
+  else if (data->marker != 123456)
+    goto stackoverflow;
+
 
   return &data->reent;
+
+stackoverflow:
+    /* abort calls printf, which calls here.  */
+    gomp_print_string ("GCN Stack Overflow!", "");
+    exit (1);
 }
 

@@ -101,6 +101,10 @@ case "${host_cpu}" in
 	machine_dir=aarch64
 	libm_machine_dir=aarch64
 	;;
+  amdgcn*)
+	newlib_cflags="${newlib_cflags} -D__DYNAMIC_REENT__"
+	machine_dir=amdgcn
+	;;
   arc*)
 	machine_dir=arc
 	;;

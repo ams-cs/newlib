@@ -82,6 +82,10 @@ __malloc_lock (struct _reent *reent)
        Use the shortest possible sleep time of 1*64 cycles.  */
     asm volatile ("s_sleep\t1" ::: "memory");
 
+  /* Flush and invalidate the L1 (per-CU) cache to ensure that the
+     global variables and heap meta data are consisent.  */
+  asm volatile ("buffer_wbinvl1");
+
   if (__heap_lock_id != NULL)
     abort ();
   if (__heap_lock_cnt != 0)
@@ -107,5 +111,10 @@ __malloc_unlock (struct _reent *reent)
     return;
 
   __heap_lock_id = NULL;
+
+  /* Flush the dirty lines of the L1 (per-CU) cache to ensure that
+     global variables and heap metadata are consistent.  */
+  asm volatile ("buffer_wbinvl1_vol");
+
   __sync_lock_release (&__heap_lock);
 }
